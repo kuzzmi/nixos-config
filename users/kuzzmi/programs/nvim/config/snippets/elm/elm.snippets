@@ -1,0 +1,99 @@
+snippet dm
+	import DataModel.${1:Model} as $1 exposing ($1)
+
+snippet dl
+	Debug.log "${1}" ${0}
+
+snippet ta
+	type alias ${1} =
+		${0}
+
+snippet id
+	type Id =
+		Id Int
+
+snippet a
+	${1:name} : ${2}
+	$1 ${3} =
+		${0}
+
+snippet me
+	module ${1:Module} exposing ${2:(..)}
+
+snippet im
+	import ${1:Module} exposing ${2:(..)}
+
+snippet ps
+	port ${1:portName} : (${2:Value} -> msg) -> Sub msg
+
+snippet main
+	main =
+		Html.beginnerProgram
+			{ model = model
+			, view = view
+			, update = update
+			}
+
+snippet update
+	update : Msg -> Model -> ( Model, Cmd Msg )
+	update action model =
+		case action of
+			$0
+
+snippet mu
+	({ model | ${1:field = value} }, Cmd.none)
+
+snippet m
+	( model, Cmd.none )
+
+snippet f
+	${1:func} : ${2:type}
+	$1 ${0}
+
+snippet boiler
+	module Main exposing (..)
+
+	import Html exposing (..)
+
+
+	main =
+		Html.beginnerProgram
+			{ model = model
+			, view = view
+			, update = update
+			}
+
+
+
+	-- MODEL
+
+
+	type alias Model = {}
+
+
+	model : Model
+	model = {}
+
+
+
+	-- UPDATE
+
+
+	type Msg
+		= Noop
+
+
+	update : Msg -> Model -> Model
+	update msg model =
+		case msg of
+			Noop ->
+				model
+
+
+
+	-- VIEW
+
+
+	view : Model -> Html msg
+	view model =
+		div [] [ text "Hello" ]

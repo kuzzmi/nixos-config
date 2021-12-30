@@ -1,0 +1,274 @@
+""""""""""
+" kuzzmi .vimrc
+""""""""""
+
+" Syntax highlighting {{{
+syntax on
+filetype plugin indent on
+filetype plugin on
+" }}}
+" FileTypes {{{
+" ============
+"
+" Filetype specific omnifuncs
+" augroup omnifuncs
+"     autocmd FileType css,scss setlocal omnifunc=csscomplete#CompleteCSS
+"     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"     autocmd FileType typescript setlocal omnifunc=TSOmnicFunc
+" augroup END
+
+set completeopt=noinsert,menuone,noselect
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+" Some Markdown settings
+autocmd BufNewFile,BufRead *.md set filetype=markdown
+autocmd FileType markdown setlocal linebreak wrap
+
+" Set 2 spaces for HTML
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+autocmd FileType handlebars setlocal shiftwidth=2 tabstop=2
+" autocmd BufNewFile,BufRead *.tsx set filetype=typescript
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+autocmd FileType typescript setlocal formatprg=prettier\ --parser\ typescript
+" }}}
+" Line numbers {{{
+" ============
+"
+" Enable
+set number
+
+" Display absolute numbers only for current line
+autocmd InsertEnter * silent! :set number
+autocmd InsertLeave,BufNewFile,VimEnter * silent! :set relativenumber
+" }}}
+" Leader key {{{
+" ==========
+"
+" Has to be defined before all mappings
+" Set leader key as a Space key
+let mapleader = " "
+" }}}
+" Mappings {{{
+" ========
+
+" Swap go to first non-blank char with go to line beginning
+nnoremap ^ 0
+nnoremap 0 ^
+vnoremap ^ 0
+vnoremap 0 ^
+
+" Navigation by logical lines
+nnoremap j gj
+nnoremap gj j
+nnoremap k gk
+nnoremap gk k
+vnoremap j gj
+vnoremap gj j
+vnoremap k gk
+vnoremap gk k
+
+" Highlight and stay
+nnoremap * *N
+
+" Highlight last inserted text
+nnoremap gV `[v`]
+
+" Spell checker toggle
+nnoremap <silent> <F9> :set spell!<CR>
+inoremap <silent> <F9> <Esc>:set spell!<CR>gi
+
+" Switch between windows
+nnoremap <silent> <C-K> <C-W>k
+nnoremap <silent> <C-J> <C-W>j
+nnoremap <silent> <C-H> <C-W>h
+nnoremap <silent> <C-L> <C-W>l
+
+" Rename current word
+nnoremap <leader>d yiw:%Subvert:<C-R>":
+
+" Search for current word in cwd
+nnoremap <silent> <C-F> yiw:Ag <C-R>"<CR>
+
+" Toggle paste mode
+set pastetoggle=<F12>
+
+" Shortcut to enter visual block substitution
+vnoremap <leader>d y<Esc>:%s:<C-R>":
+
+" Increment selected numbers
+function! Incr()
+    let a = line('.') - line("'<")
+    let c = virtcol("'<")
+    if a > 0
+        execute 'normal! '.c.'|'.a."\<C-a>"
+    endif
+    normal `<
+endfunction
+vnoremap <C-a> :call Incr()<CR>
+
+" Duplicate current selection
+nnoremap <C-D> yyP
+inoremap <C-D> <Esc>yyPi
+vnoremap <C-D> y/\V<C-R>"<CR>
+
+" Indentation without losing selection
+vnoremap > >gv
+vnoremap < <gv
+
+" Remove search highlighting
+nnoremap <silent> <C-n> :noh<CR>
+
+" Create Blank Newlines and stay in Normal mode
+nnoremap <silent> <leader>j o<Esc>
+nnoremap <silent> <leader>k O<Esc>
+
+" Break current line with <CR> and stay in normal mode
+nnoremap <F3> i<CR><Esc><F5>
+
+" Search mappings:
+" These will make it so that going to the next one in a search
+" will center on the line it's found in.
+nnoremap n nzz
+nnoremap N Nzz
+
+" Swap ; and :
+" Convenient.
+nnoremap ; :
+nnoremap : ;
+vnoremap ; :
+vnoremap : ;
+
+" Remove trailing spaces on F5
+nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+
+" Copy whole file to clipboard
+nnoremap <F4> <Esc>ggVG"*y
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" }}}
+" Colors and font settings {{{
+set t_Co=256
+set background=dark
+colorscheme wal
+" }}}
+" Folding {{{
+" =======
+set foldenable
+set foldlevelstart=10
+set foldmethod=indent
+" }}}
+" Misc {{{
+" ====
+
+" Color column
+set colorcolumn=80
+
+" Disable swap files from being created
+set noswapfile
+
+" Set new directory for backup files
+set nobackup
+
+" Remove widget stuff from window in gVim
+set guioptions-=m
+set guioptions-=T
+set guioptions-=r
+set guioptions-=L
+
+" Use modelines
+set modelines=1
+
+" Automatic reloading of .vimrc
+autocmd! bufwritepost vimrc source %
+
+" Start scrolling N lines before edge
+set so=5
+
+" Horizontal split always to the bottom
+set splitbelow
+
+" Puts vertical windows to right, instead of left.
+set splitright
+
+" Tabs are 2 chars wide
+set tabstop=2
+
+" Indentation size is 4 characters
+set shiftwidth=2
+
+" Make backspace work like most other apps
+set backspace=2
+
+" Dont add additional space on S-j
+set nojoinspaces
+
+" Convert tabs to spaces
+set expandtab
+set smarttab
+
+" Be single lined
+set nowrap
+
+" Necesary for lots of cool vim things
+set nocompatible
+
+" This shows what you are typing as a command
+set showcmd
+
+" Who doesn't like autoindent?
+set autoindent
+
+" Cool tab completion stuff
+" set wildmenu
+" set wildmode=list:longest,full
+
+" Ignoring case is a fun trick
+set ignorecase
+
+" And so is Artificial Intellegence!
+set smartcase
+
+" Incremental searching is sexy
+set incsearch
+
+" Highlight things that we find with the search
+set hlsearch
+
+" Don't redraw when not needed
+set lazyredraw
+
+" Highlighting trail spaces
+highlight ExtraWhitespace ctermfg=yellow guifg=red
+" ctermfg=white guifg=white
+match ExtraWhitespace /\s\+$/
+
+" Displaying trailing spaces as hearts and tabs as -
+set listchars=tab:-\ ,trail:♥
+set list!
+
+set iminsert=0
+set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
+
+hi MatchParen cterm=reverse ctermbg=white
+
+" Closetag files
+let g:closetag_filenames = "*.html,*.js,*.jsx,*.tsx"
+let g:closetag_regions = {
+    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+    \ 'javascript.jsx': 'jsxRegion',
+    \ 'typescriptreact': 'jsxRegion,tsxRegion',
+    \ 'javascriptreact': 'jsxRegion',
+    \ }
+" }}}
+" vim:foldmethod=marker:foldlevel=0

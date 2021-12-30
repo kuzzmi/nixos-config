@@ -1,0 +1,21 @@
+---
+name: fundof
+project_root: "/home/kuzzmi/Projects/fundof"
+windows:
+- zsh:
+    layout: c25d,213x55,0,0,0
+    panes:
+      - cd /home/kuzzmi/Projects/fundof/web && vim
+- zsh:
+    layout: c25e,213x55,0,0,1
+    panes:
+      - cd /home/kuzzmi/Projects/fundof/server && vim
+- zsh:
+    layout: c25e,213x55,0,0,2
+    panes:
+      - cd /home/kuzzmi/Projects/fundof && ranger
+- zsh:
+    layout: even-vertical
+    panes:
+      - cd /home/kuzzmi/Projects/fundof/server && yarn docker:start:db && yarn start:dev
+      - cd /home/kuzzmi/Projects/fundof/web && yarn start:dev

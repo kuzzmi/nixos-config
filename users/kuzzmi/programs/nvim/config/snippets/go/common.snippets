@@ -1,0 +1,16 @@
+snippet idr
+	if err != nil {
+		return nil, err
+	}
+	${0}
+
+snippet icr
+	if err != nil {
+		c.JSON(400, err.Error())
+		return
+	}
+
+snippet ts
+	type ${1:Struct} struct {
+		${0}
+	}

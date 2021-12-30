@@ -1,0 +1,207 @@
+# React Lifecycle Hooks
+# snippet cwm
+# 	componentWillMount() {
+# 		${0}
+# 	}
+# snippet cdm
+# 	componentDidMount() {
+# 		${0}
+# 	}
+# snippet cwrp
+# 	componentWillReceiveProps(${1:nextProps}) {
+# 		${0}
+# 	}
+# snippet scu
+# 	shouldComponentUpdate(${1:nextProps}${2:, nextState}) {
+# 		${0}
+# 		return true;
+# 	}
+# snippet cdu
+# 	componentDidUpdate(${1:prevProps}${2:, prevState}) {
+# 		${0}
+# 	}
+# snippet cwu
+# 	componentWillUnmount() {
+# 		${0}
+# 	}
+
+snippet ss
+	this.setState({ ${0} });
+
+snippet sss
+	this.setState(state => ({
+		...state,
+		${0}
+	}));
+
+snippet ptt
+	PropTypes.${1:any}${2:.isRequired}
+
+snippet cn
+	className=${1:{ classes.${2} }}
+
+snippet cnx
+	className={ cx(${1}) }
+
+snippet sty
+	const styles = StyleSheet.create({
+		${0}
+	});
+
+# ES6 constructor
+snippet cons
+	constructor(${1:props}) {
+		super($1);
+		${0}
+	}
+
+# Testing
+snippet desc
+	describe('${1}', () => {
+		it('should ${2}', () => {
+			${0}
+		});
+	});
+
+snippet it
+	it('should ${1}', () => {
+		${0}
+	});
+
+# Node cool stuff
+snippet pnt
+	process.nextTick(() => {
+		${0}
+	});
+
+snippet fe
+	forEach(${1:item} => {
+		${0}
+	});
+
+# Just useful stuff
+snippet ec
+	export const ${0}
+
+snippet bind
+	this.${1:fn} = this.$1.bind(this);
+
+snippet rcl
+	class ${1} extends Component {
+		render() {
+			return (
+				${0}
+			);
+		}
+	}
+
+snippet =req
+	const ${1:package} = require('${0}');
+
+snippet req
+	require('${1}');
+
+snippet me
+	module.exports
+
+snippet ins
+	console.log(require('util').inspect(${1}, { showHidden: false, depth: null }));
+	${0}
+
+# setInterval function
+snippet si
+	setInterval(function() {
+		${0}
+	}, ${1:10});
+
+snippet sto
+	setTimeout(function() {
+		${0}
+	}, ${1:10});
+
+snippet /*
+	/*
+	 * ${0}
+	 */
+
+snippet rnbp
+	import React from 'react';
+	import {
+		View,
+		Text,
+	} from 'react-native';
+
+	const ${1:name} = props => {
+		return (
+			<View>
+				<Text>$1</Text>
+			</View>
+		);
+	};
+
+	export default $1;
+
+snippet rncomp
+	import React, { Component } from 'react';
+	import PropTypes from 'prop-types';
+	import { View, StyleSheet, Text } from 'react-native';
+
+	const styles = StyleSheet.create({
+	  container: {
+	    flex: 1,
+	  },
+	});
+
+	class ${1:name} extends Component {
+	  static propTypes = {};
+
+	  render() {
+	    return (
+	      <View>
+	        <Text>$1</Text>
+	      </View>
+	    );
+	  }
+	}
+
+	export default $1;
+
+# Webpack
+snippet reactwebpack
+	const path = require('path');
+	const webpack = require('webpack');
+
+	module.exports = {
+		mode: 'development',
+		entry: './src/index.js',
+
+		output: {
+			path: path.resolve(__dirname, './dist/'),
+			filename: 'bundle.js',
+		},
+
+		devServer: {
+			contentBase: path.resolve(__dirname, './dist/'),
+			compress: true,
+			port: 8000,
+			historyApiFallback: true,
+		},
+
+		module: {
+			rules: [{
+				test: /\.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				options: {
+					presets: ['react'],
+				},
+			}, {
+				test: /\.css$/,
+				loader: 'style-loader!css-loader',
+			}],
+		},
+
+		plugins: [
+			new webpack.HotModuleReplacementPlugin(),
+		]
+	};

@@ -1,0 +1,10 @@
+---
+name: fin
+project_root: "/home/kuzzmi/Documents/Finances/ledger"
+windows:
+- zsh:
+    layout: 3f86,213x56,0,0{107x56,0,0,0,105x56,108,0[105x45,108,0,1,105x10,108,46,2]}
+    panes:
+    - vim ledger.dat
+    - echo ledger.dat | entr -c make cash
+    - cal -s3

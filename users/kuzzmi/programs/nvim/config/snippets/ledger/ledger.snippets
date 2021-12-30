@@ -1,0 +1,45 @@
+snippet t
+	`strftime("%Y/%m/%d")` ${1:transaction}
+	    ${2:account}    ${3:value}
+	    ${0:account}
+
+snippet aga
+	Expenses:Cars:Audi:Gas  UAH ${1:value}
+
+snippet gro
+	Expenses:Groceries  UAH ${1:value}
+
+snippet lar
+	Expenses:Home:Maid  UAH ${1:value}.00
+
+snippet su "Support"
+	`strftime("%Y/%m/%d")` * Support
+		Expenses:Support:Wife  USD ${1:value}.00
+		${0:Assets:Cash:Envelope}
+
+snippet f
+	Assets:Cash:Envelopes:${0:Fund}
+
+snippet doc
+	Expenses:Health:Doctor  UAH ${1:value}
+
+snippet wi
+	Assets:Cash:Wife
+
+snippet wa
+	Assets:Cash:Wallet
+
+snippet mo
+	Assets:Banking:Monobank:Black
+
+snippet mb
+	Assets:Banking:Monobank:Banka
+
+snippet eed
+	Expenses:Entertainment:Dining  UAH ${1:value}
+
+snippet uc
+	Assets:Banking:UBS:Checking
+
+snippet up
+	Assets:Banking:UBS:Prepaid
