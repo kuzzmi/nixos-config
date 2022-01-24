@@ -5,8 +5,8 @@
     longitude = 46.48;
     latitude = 30.71;
     temperature = {
-      day = 6500;
-      night = 5000;
+      day = 7500;
+      night = 5500;
     };
   };
 }

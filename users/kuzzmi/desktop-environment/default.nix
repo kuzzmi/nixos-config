@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./alacritty/default.nix
+    ./kitty/default.nix
     ./xmonad/default.nix
     ./rofi/default.nix
     ./polybar/default.nix

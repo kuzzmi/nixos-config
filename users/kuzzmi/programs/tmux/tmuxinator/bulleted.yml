@@ -1,0 +1,21 @@
+---
+name: bulleted
+project_root: "/home/kuzzmi/Projects/bulleted.app"
+windows:
+- zsh:
+    layout: c25d,213x55,0,0,0
+    panes:
+      - cd /home/kuzzmi/Projects/bulleted.app/client && vim
+- zsh:
+    layout: c25e,213x55,0,0,1
+    panes:
+      - cd /home/kuzzmi/Projects/bulleted.app/functions && vim
+- zsh:
+    layout: c25e,213x55,0,0,2
+    panes:
+      - cd /home/kuzzmi/Projects/bulleted.app && ranger
+- zsh:
+    layout: 9fb0,210x47,0,0{105x47,0,0,1,104x47,106,0,2}
+    panes:
+      - cd /home/kuzzmi/Projects/bulleted.app && ./start-firebase.sh
+      - cd /home/kuzzmi/Projects/bulleted.app/client && yarn dev

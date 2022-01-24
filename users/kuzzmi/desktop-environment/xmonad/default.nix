@@ -43,7 +43,7 @@ in
         extraPackages = hp: [
           hp.dbus
           hp.monad-logger
-          hp.xmonad-contrib
+          hp.xmonad-contrib_0_17_0
         ];
         config = cfg;
       };

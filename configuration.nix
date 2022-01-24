@@ -62,8 +62,12 @@ in {
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
+      screenSection = ''
+            Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+	    Option         "TripleBuffer" "on"
+      '';
     };
-    dbus.packages = [ pkgs.gnome3.dconf ];
+    dbus.packages = [];
     gnome.gnome-keyring.enable = true;
   };
 

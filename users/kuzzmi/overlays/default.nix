@@ -18,11 +18,44 @@ final: prev:
     };
   });
 
-  ocenaudio = prev.ocenaudio.overrideAttrs (old: rec {
-    version = "3.10.6";
-    src = prev.fetchurl {
-      url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-      sha256 = "1xxv67b80kjbzh3x6h5jcn6plvnfvgigz6z5ra5hkzaxjyxrd34r";
-    };
+  # ocenaudio = prev.ocenaudio.overrideAttrs (old: rec {
+  #   version = "3.10.6";
+  #   src = prev.fetchurl {
+  #     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
+  #     sha256 = "1xxv67b80kjbzh3x6h5jcn6plvnfvgigz6z5ra5hkzaxjyxrd34r";
+  #   };
+  # });
+
+  ethminer = prev.ethminer.overrideAttrs (old: rec {
+    src =
+      prev.fetchFromGitHub {
+        owner = "ethereum-mining";
+        repo = "ethminer";
+        rev = "master";
+        sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
+        fetchSubmodules = true;
+      };
+
+    buildInputs = [
+      prev.cli11
+      prev.boost
+      prev.opencl-headers
+      prev.mesa
+      prev.ethash
+      prev.opencl-info
+      prev.ocl-icd
+      prev.openssl
+      prev.jsoncpp
+      prev.cudatoolkit_11
+    ];
+
+    cmakeFlags = [
+      "-DHUNTER_ENABLED=OFF"
+      "-DETHASHCUDA=ON"
+      "-DAPICORE=ON"
+      "-DETHDBUS=OFF"
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCUDA_PROPAGATE_HOST_FLAGS=off"
+    ];
   });
 }

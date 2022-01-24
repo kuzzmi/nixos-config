@@ -37,7 +37,6 @@
         esac
         return 0;
       }
-      export PATH=~/.yarn/bin:$PATH
       eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
     '';
     history = {

@@ -7,26 +7,27 @@ in {
   services.picom = {
     enable = true;
     package = nur.repos.reedrw.picom-next-ibhagwan;
+    # backend = "xrender";
     backend = "glx";
-    vSync = true;
+    # vSync = true;
 
-    # "window_type = 'dock'",
+    # fading = true;
+    # fade-in-step = 0.1;
+    # fade-out-step = 0.1;
+        # "window_type = 'desktop'",
 
     extraOptions = ''
       corner-radius = 14;
       rounded-corners-exclude = [
-        "window_type = 'desktop'",
+        "class_g ?= 'Polybar'",
         "class_g ?= 'Steam'"
       ];
-      transparent-clipping = false;
-      fading = true;
-      fade-in-step = 0.1;
-      fade-out-step = 0.1;
       shadow = true;
       shadow-offset-x = -30;
       shadow-offset-y = -30;
       shadow-radius = 30;
       shadow-opacity = .3;
+      transparent-clipping = false;
       focus-exclude = [
         "window_type = 'dock'",
         "window_type = 'desktop'",

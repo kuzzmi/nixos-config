@@ -1,3 +1,4 @@
+{ config, ... }:
 let
   pkgs = import <nixpkgs> {
     config.allowUnfree = true;
@@ -29,7 +30,7 @@ in {
       ./programs/nvim/default.nix
       ./programs/gpg/default.nix
       ./programs/ranger/default.nix
-      ./services/redshift/default.nix
+      # ./services/redshift/default.nix
       ./services/picom/default.nix
     ];
 
@@ -149,6 +150,7 @@ in {
         # Media
         mpv
         vlc
+        streamlink
 
         # Creative
         obs-studio
@@ -168,10 +170,11 @@ in {
 
         # Crypto
         electrum
+        # ethminer
 
         # Commmunication
         skype
-        # slack
+        slack
         zoom-us
         tdesktop
         mailspring
@@ -197,13 +200,14 @@ in {
 
         # Fin
         ledger
+        fava
         gnuplot_qt
 
         # Dev
         gh
         gnumake
-        nodejs-14_x
-        yarn
+        # nodejs-14_x
+        # yarn
         dbeaver
         google-cloud-sdk
         android-studio
@@ -242,7 +246,8 @@ in {
           ".config/google-chrome"        # Google Chrome profiles
           ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
           ".config/Slack"                # Slack stuff
-          ".config/yarn"                 # yarn binaries
+          # ".config/yarn"                 # yarn binaries
+          ".config/mpv"                  # mpv config
           ".config/zsh"                  # Zsh history
           ".config/Mailspring"           # Email
           ".config/qt5ct"                # TODO: QT5 theming, not working
@@ -260,7 +265,7 @@ in {
           ".local/share/vlc"             # VLC settings
           ".local/data/pgsql"            # postgresql data
           ".ssh"
-          ".yarn"
+          # ".yarn"
 
           # Steam
           # ".steam"
@@ -276,6 +281,12 @@ in {
       file.".xbindkeysrc".text = ''
         "xdotool key Escape && sleep 0.5 && xdotool mousemove 1913 941 && xdotool click 1 && sleep 2 && xdotool key Return"
           Scroll_Lock
+      '';
+
+      file.".config/streamlink/config".text = ''
+        # Player options
+        player=mpv --cache 2048
+        player-no-close
       '';
     };
   };

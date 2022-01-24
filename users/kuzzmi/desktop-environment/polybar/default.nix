@@ -21,22 +21,30 @@ in
         fixed-center = true;
         # width = "100%";
         height = 60;
-        radius = 14;
-        offset-y = 20;
-        background = "#FFFFFFFF";
-        foreground = colors.primary.background;
+        # radius = 14;
+        # offset-y = 20;
+        background = colors.primary.background;
+        foreground = colors.primary.foreground;
         dim-value = 1;
         font = {
-          "0" = "${fonts.mono.name}:pixelsize=20:antialias=true;3";
+          "0" = "${fonts.mono.name}:weight:900:pixelsize=20:bold:antialias=true:hinting=true;3";
         };
         tray.position = "none";
+      };
+      "bar/main" = {
+        "inherit" = "bar/base";
+        modules = {
+          left = "xmonad";
+          center = "title";
+          right = "cpu memory keyboard date";
+        };
       };
       "bar/left" = {
         "inherit" = "bar/base";
         modules = {
           left = "xmonad";
         };
-        width = 466;
+        width = 700;
         offset-x = 20;
       };
       "bar/layout" = {
@@ -128,6 +136,6 @@ in
         type = "internal/xworkspaces";
       };
     };
-    script = "polybar left & disown && polybar right & disown && polybar center & disown";
+    script = "polybar left & disown; polybar right & disown; polybar center & disown";
   };
 }

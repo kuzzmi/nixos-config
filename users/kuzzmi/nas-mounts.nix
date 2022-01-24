@@ -2,7 +2,7 @@
 let
   credentials = config.age.secrets.nas.path;
   mounts = [
-    # { local = "Containers"; remote = "Containers"; }
+    { local = "Containers"; remote = "ContainerData"; }
     { local = "Downloads"; remote = "Download"; }
     { local = "Documents"; remote = "Documents"; }
     { local = "Multimedia"; remote = "Multimedia"; }
