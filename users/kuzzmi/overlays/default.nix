@@ -26,6 +26,15 @@ final: prev:
   #   };
   # });
 
+  # lightworks_2022 = prev.lightworks.overrideAttrs (old: rec {
+  #   version = "2022.1.1";
+  #   rev = "132185";
+  #   src = prev.fetchurl {
+  #     url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
+  #     sha256 = "sha256-uZn9PRPlnF4Ov2jNY1KzMvi/OMPdGomkdIpA/u3JLvA=";
+  #   };
+  # });
+
   ethminer = prev.ethminer.overrideAttrs (old: rec {
     src =
       prev.fetchFromGitHub {

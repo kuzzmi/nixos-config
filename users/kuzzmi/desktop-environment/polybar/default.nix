@@ -136,6 +136,6 @@ in
         type = "internal/xworkspaces";
       };
     };
-    script = "polybar left & disown; polybar right & disown; polybar center & disown";
+    script = "polybar main & disown";
   };
 }

@@ -11,6 +11,7 @@ let
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
   rubik = (import ./pkgs/fonts/rubik.nix);
+  lwks2022 = (import ./pkgs/applications/lightworks_2022.nix);
 in {
   age = {
     identityPaths = [ /nix/persist/home/kuzzmi/.ssh/id_rsa ];
@@ -121,6 +122,7 @@ in {
       packages = with pkgs; [
         # Browsers
         google-chrome
+        tor
 
         # Customizations
         feh
@@ -132,13 +134,10 @@ in {
         fzf
         pavucontrol
         unzip
-        youtube-dl
-        ffmpeg
         entr    # monitor changes
         direnv  # directory-specific envs
         xbindkeys
         xdotool
-        playerctl
         yq
         udisks
         bashmount
@@ -146,8 +145,16 @@ in {
         dconf
         xclip
         xorg.xev
+        libusb
+
+        # To talk to iPhone
+        libimobiledevice
+        ifuse
 
         # Media
+        ffmpeg
+        playerctl
+        youtube-dl
         mpv
         vlc
         streamlink
@@ -156,8 +163,7 @@ in {
         obs-studio
         audacity
         ocenaudio
-        ardour
-        lightworks
+        lwks2022
         gimp
         inkscape
 
@@ -173,7 +179,7 @@ in {
         # ethminer
 
         # Commmunication
-        skype
+        skypeforlinux
         slack
         zoom-us
         tdesktop
@@ -184,8 +190,8 @@ in {
         evince # PDF viewer
         transmission
         razergenie
-        # mtpfs
         calibre
+        lutris
 
         # Screen shots / screen recordings
         flameshot
@@ -193,7 +199,7 @@ in {
 
         # Fonts
         jetbrains-mono
-        font-awesome-ttf
+        font-awesome
         material-design-icons
         rubik
         roboto
@@ -206,8 +212,6 @@ in {
         # Dev
         gh
         gnumake
-        # nodejs-14_x
-        # yarn
         dbeaver
         google-cloud-sdk
         android-studio
@@ -259,12 +263,14 @@ in {
           ".local/share/DBeaverData"     # dbeaver settings
           ".local/share/Google"          # Android Studio settings
           ".local/share/keyrings"        # security keyrings
-          ".local/share/mime"            # mime settings
           ".local/share/ranger"          # ranger stuff
           ".local/share/TelegramDesktop" # Telegram settings
           ".local/share/vlc"             # VLC settings
+          ".local/share/direnv"          # direnv permission directory
           ".local/data/pgsql"            # postgresql data
           ".ssh"
+          ".ntcardvt-wrapped"            # lightworks settings
+          ".local/share/Meltytech/Shotcut/" # Shotcut settings
           # ".yarn"
 
           # Steam
@@ -274,7 +280,6 @@ in {
         ];
         files = [
           ".fehbg"
-          ".local/share/mimeapps.list"
         ];
       };
 
@@ -289,6 +294,24 @@ in {
         player-no-close
       '';
     };
+
+    xdg.mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/html" = ["google-chrome.desktop"];
+        "application/pdf" = ["evince.desktop"];
+        "inode/directory" = ["ranger.desktop"];
+        "application/x-directory" = ["ranger.desktop"];
+      };
+    };
+
+    services.xcape = {
+      enable = true;
+      timeout = 250;
+      mapExpression = {
+        Super_L = "Escape";
+      };
+    };
   };
 
   # Enables startx script with Xmonad.
@@ -297,6 +320,8 @@ in {
     defaultSession = "startx+xmonad";
     startx.enable = true;
   };
+
+  services.usbmuxd.enable = true;
 
   users = {
     extraGroups.vboxusers.members = [ "kuzzmi" ];

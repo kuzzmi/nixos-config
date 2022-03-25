@@ -7,7 +7,7 @@ in
 {
   programs.rofi = {
     enable = true;
-    terminal = "${pkgs.alacritty}/bin/alacritty";
+    terminal = "${pkgs.kitty}/bin/kitty";
     extraConfig = {
       modi = "combi";
       width = 40;
@@ -17,7 +17,7 @@ in
       bw = 0;
       location = 0;
       padding = 40;
-      terminal = "alacritty";
+      terminal = "kitty";
       run-shell-command = "{terminal} -e {cmd}";
       case-sensitive = false;
       combi-modi = "window,run,drun";

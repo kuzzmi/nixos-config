@@ -18,8 +18,14 @@ in {
 
   networking = {
     useDHCP = false;
+    enableIPv6 = false;
+    wireless = {
+      enable = true;
+      userControlled.enable = true;
+    };
     interfaces = {
       enp5s0.useDHCP = true;
+      # enp0s20f0u6c4i2.useDHCP = true;
       wlo1.useDHCP = true;
     };
   };

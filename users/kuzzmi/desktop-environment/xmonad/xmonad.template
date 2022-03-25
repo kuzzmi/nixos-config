@@ -1,26 +1,38 @@
 import XMonad
 
 import System.IO
+import System.Exit
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 
 import Data.List(isInfixOf)
 
-import XMonad.Actions.CopyWindow
+import XMonad.Actions.CopyWindow (copyToAll, killAllOtherCopies)
 import XMonad.Actions.CycleRecentWS (toggleRecentNonEmptyWS)
 import XMonad.Actions.CycleWS (moveTo, emptyWS, ignoringWSs, WSType(..))
-import XMonad.Actions.DynamicProjects
-import XMonad.Actions.SpawnOn
-import XMonad.Actions.WithAll
+import XMonad.Actions.DynamicProjects ( dynamicProjects
+                                      , switchProjectPrompt
+                                      , shiftToProjectPrompt
+                                      , Project(..)
+                                      )
+import XMonad.Actions.SpawnOn (spawnOn, spawnAndDo, manageSpawn)
+import XMonad.Actions.WithAll (killAll)
 import XMonad.Actions.EasyMotion (selectWindow, ChordKeys(AnyKeys), EasyMotionConfig(..), proportional)
-import XMonad.Actions.TagWindows (addTag, hasTag, withTaggedP, withTaggedGlobalP, shiftHere)
+import XMonad.Actions.TagWindows (addTag, delTag, hasTag, withTaggedP, withTaggedGlobalP, shiftHere)
 
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.DynamicLog (dynamicLogWithPP, PP(..), wrap)
+import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.ManageDocks (manageDocks, docks, avoidStruts)
+import XMonad.Hooks.ManageHelpers ( (-?>)
+                                  , doRectFloat
+                                  , doFullFloat
+                                  , isFullscreen
+                                  , composeOne
+                                  )
 import XMonad.Hooks.Place
 import XMonad.Hooks.UrgencyHook
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.XPropManage
 
@@ -35,29 +47,26 @@ import XMonad.Util.NamedScratchpad ( namedScratchpadManageHook
 import XMonad.Util.NamedWindows
 import XMonad.Util.WorkspaceCompare
 
-import XMonad.Layout.BinarySpacePartition
-import XMonad.Layout.NoFrillsDecoration
-import XMonad.Layout.Decoration
+import XMonad.Layout.BoringWindows
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
 import XMonad.Layout.Grid
 import XMonad.Layout.LayoutBuilder
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
-import XMonad.Layout.NoBorders
-import XMonad.Layout.Spacing
-import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Named
-import XMonad.Layout.Master
-import XMonad.Layout.SimpleDecoration
-import XMonad.Layout.Tabbed
-import XMonad.Layout.SubLayouts
-import XMonad.Layout.WindowNavigation
-import XMonad.Layout.Simplest
+import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Simplest
+import XMonad.Layout.Spacing
+import XMonad.Layout.SubLayouts as SL
+import XMonad.Layout.Tabbed
+import XMonad.Layout.WindowNavigation (windowNavigation)
 
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
+import XMonad.Prompt.ConfirmPrompt
 
 -- Polybar imports
 import qualified Codec.Binary.UTF8.String as UTF8
@@ -159,7 +168,6 @@ wsFIN = "FIN"
 wsFND = "FND"
 wsBUL = "BUL"
 wsBRW = "BRW"
-wsCOM = "COM"
 wsGAM = "GAM"
 wsPOD = "POD"
 wsDUS = "DUS"
@@ -167,7 +175,7 @@ wsMIS = "MIS"
 wsNSP = "NSP"
 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = [wsGEN, wsFIN, wsFND, wsBUL, wsDUS, wsBRW, wsCOM, wsGAM, wsPOD, wsMIS]
+myWorkspaces = [wsGEN, wsFIN, wsFND, wsBUL, wsDUS, wsBRW, wsGAM, wsPOD, wsMIS]
 
 projects :: [Project]
 projects =
@@ -188,28 +196,20 @@ projects =
             , projectStartHook = Just $ do spawnOn wsFIN "kitty -e $SHELL -c 'cal -s3 && $SHELL'"
                                            spawnOn wsFIN "kitty -e make watch"
                                            spawnOn wsFIN "kitty -e vim ledger.dat"
-            -- , projectStartHook = Just $ do spawnOn wsFIN myTerminal
-            --                                spawnOn wsFIN myTerminal
-            --                                spawnOn wsFIN myTerminal
             }
 
   , Project { projectName      = wsFND
             , projectDirectory = "~/Projects/fundof"
-            , projectStartHook = Just $ do spawnOn wsFND myTerminal
-                                           spawnOn wsFND myTerminal
-                                           spawnOn wsFND myTerminal
+            , projectStartHook = Just $ do spawnAndDo (doShift wsFND) "slack"
                                            spawnOn wsFND $ myBrowser ++ " --profile-directory=\"Profile 4\""
+                                           spawnOn wsFND myTerminal
+                                           spawnOn wsFND myTerminal
+                                           spawnOn wsFND myTerminal
             }
 
   , Project { projectName      = wsBRW
             , projectDirectory = "~/"
-            , projectStartHook = Just $ do spawnOn wsBRW myBrowser
-            }
-
-  , Project { projectName      = wsCOM
-            , projectDirectory = "~/"
-            , projectStartHook = Just $ do spawnOn wsCOM "slack"
-                                           spawnOn wsCOM "mailspring"
+            , projectStartHook = Just $ do spawnOn wsBRW $ myBrowser ++ " --profile-directory=\"Profile 1\""
             }
 
   , Project { projectName      = wsPOD
@@ -245,7 +245,10 @@ myBrowser            = "google-chrome-stable --use-gl=desktop --enable-features=
 
 myFocusFollowsMouse  = False
 myClickJustFocuses   = False
-myPlacement          = fixed (0.5, 0.5) -- center of the screen
+myPlacement          = inBounds $ fixed (0.5, 0.5) -- center of the screen
+centered             = W.RationalRect (1/8) (1/8) (3/4) (3/4)
+centeredS            = W.RationalRect (1/4) (1/4) (1/2) (1/2)
+corner               = W.RationalRect (3/4 - 50) (3/4 - 50) (1/4) (1/4)
 
 -- Queries for manage hook
 -- q ~? x = fmap (x `isInfixOf`) q
@@ -256,80 +259,105 @@ xPropMatches = tagclasses ["mpv"] "mpv"
     where
         ckClass cls = [(wM_CLASS, any (cls==))]
         tag name  = pmX (addTag name)
-        mkfloat = pmX float
         tagclasses clss name = [ (ckClass cls, tag name) | cls <- clss ]
 
 myManageHook =
+    manageSpawn <+>
+    xPropManageHook xPropMatches <+>
     composeAll
         [ namedScratchpadManageHook myScratchpads
         , isFullscreen --> doFullFloat
 
-        , name =? "discord" --> doShift wsCOM
-        , className =? "mpv" --> (doRectFloat $ W.RationalRect 0.745 0.0465 0.25 0.25)
+        , className =? "Slack"      --> doShift wsFND
+        , className =? "Steam"      --> doShift wsGAM
+
+        -- , className =? "Discord"    --> doShift wsCOM
+        -- , className =? "discord"    --> doShift wsCOM
+        -- , name      =? "discord"    --> doShift wsCOM
+        -- , className =? "Mailspring" --> doShift wsCOM
+
+        , className =? "mpv"                  --> (doRectFloat $ W.RationalRect 0.745 0.0465 0.25 0.25)
+        , role      =? "GtkFileChooserDialog" --> (doRectFloat $ centeredS)
+        , className =? "Pavucontrol"          --> (doRectFloat $ centeredS) <+> doF copyToAll
+        , className =? "Seahorse"             --> (doRectFloat $ centeredS)
+
         , placeHook myPlacement
-        , className =? "Discord" --> doShift wsCOM
-        , className =? "discord" --> doShift wsCOM
-        , className =? "Slack" --> doShift wsCOM
-        , className =? "Mailspring" --> doShift wsCOM
-        , className =? "Steam" --> doShift wsGAM
-        , className =? "Pavucontrol" --> doFloat <+> doF copyToAll
-        , className =? "Seahorse" --> doFloat
-        , className =? "MEGAsync" --> doFloat
+        , className =? "MEGAsync"             --> doFloat
         , className =? "SimpleScreenRecorder" --> doFloat
-        , role =? "GtkFileChooserDialog" --> doFloat
+
+        , className =? "kitty" --> tileBelow
+
         -- , role ~? "gimp-" <&&> role !? "gimp-image-window" --> doFloat
-        , composeOne [ isFullscreen -?> doFullFloat ]
+        -- , composeOne [
+        --     isFullscreen -?> doFullFloat
+        --   ]
         , manageDocks
-        ] <+> (xPropManageHook xPropMatches)
+        ]
     where
         name = stringProperty "WM_NAME"
         role = stringProperty "WM_WINDOW_ROLE"
+        tileBelow = insertPosition Below Newer
 
 -- Scratch Pads
 myScratchpads =
-    [ NS "telegram" "telegram-desktop" ((className =? "Telegram") <||> (className =? "telegram-desktop") <||> (className =? "TelegramDesktop")) (customFloating $ sPadSize)
-    , NS "terminal" "kitty -T kitty-scratch" (title =? "kitty-scratch") (customFloating $ sPadSize)
-    , NS "keepass" "secret-tool lookup keepass database | keepassxc --pw-stdin ~/Private/Passwords.kdbx" (className =? "KeePassXC") (customFloating $ sPadSize)
+    [ NS "telegram" "telegram-desktop" ((className =? "Telegram") <||> (className =? "telegram-desktop") <||> (className =? "TelegramDesktop")) (customFloating $ centered)
+    , NS "terminal" "kitty -T kitty-scratch" (title =? "kitty-scratch") (customFloating $ centered)
+    , NS "email" "mailspring" ((className =? "mailspring") <||> (className =? "Mailspring")) (customFloating $ centered)
+    , NS "mpv" "mpv $(xclip -o)" ((className =? "mpv") <||> (className =? "mpv")) (customFloating $ corner)
+    , NS "keepass" "secret-tool lookup keepass database | keepassxc --pw-stdin ~/Private/Passwords.kdbx" (className =? "KeePassXC") (customFloating $ centered)
     ]
-    where
-      cornerSize = W.RationalRect 0.745 0.0465 0.25 0.25
-      sPadSize = W.RationalRect (1/8) (1/8) (3/4) (3/4)
 
 myLayout =
     windowNavigation $
-    smartBorders .
-    onWorkspace wsFIN (coolGrid) .
-    onWorkspace wsGEN (tiled ||| tabs ||| coolGrid) .
-    onWorkspace wsFND (workGrid ||| tiled ||| tabs) .
-    onWorkspace wsBUL (workGrid ||| tiled ||| tabs) .
-    onWorkspace wsDUS (workGrid ||| tiled ||| tabs) .
-    onWorkspace wsBRW (tiled ||| tabs) .
-    onWorkspace wsGAM (noBorders $ tiled ||| tabs) .
-    onWorkspace wsCOM tabs .
+    boringWindows $
+    smartBorders $
+    onWorkspace wsGAM (noBorders $ tiled ||| tabs) $
+    onWorkspace wsFIN fin .
     full $
-    tiled ||| bsp ||| tabs
+    tiled ||| tabs
+    -- onWorkspace wsFIN (tiled ||| tabs) .
+    -- onWorkspace wsBRW (tiled ||| tabs) .
+    -- tiled ||| tabs ||| workGrid
     where
         myGaps = spacingWithEdge gap
 
         full = mkToggle (NOBORDERS ?? FULL ?? EOT)
 
         nmaster = 1
-        ratio   = 1 / 2
+        ratio   = 2 / 3
         delta   = 1 / 15
-
-        bsp = named "BSP"
-            $ avoidStruts
-            $ myGaps emptyBSP
-
-        -- grid = named "Grid"
-        --     $ avoidStruts
-        --     $ myGaps Grid
 
         tiled = named "Tiled"
             $ avoidStruts
+            $ subLayout [] (noGapsTabs)
             $ myGaps
             $ Tall nmaster delta ratio
 
+        fin = named "Finances"
+            $ avoidStruts
+            $ subLayout [] (noGapsTabs)
+            $ myGaps
+            $ ResizableTall nmaster delta ratio [1, 2/5]
+
+        -- Doesn't work :(
+        -- FIXME: focus starts jumping between tabs and right layout
+        --
+        --         Work grid
+        --   --------------------
+        --   |            |     |
+        --   |            |     |
+        --   |            |     |
+        --   |            |-----|
+        --   |            |     |
+        --   |    Tabs    |     |
+        --   |            |     |
+        --   --------------------
+        workGrid = named "Work grid"
+          $ avoidStruts
+          $ myGaps
+          $ (layoutN 2 (relBox (3/4) 0 1     1) (Just $ relBox 0 0 1 1) $ Tall 2 0.1 0.5)
+          $ (layoutAll (relBox 0     0 (3/4) 1)                           noGapsTabs)
+        --
         --         Cool grid
         --   --------------------
         --   |         |        |
@@ -340,19 +368,12 @@ myLayout =
         --   |         |  Tabs  |
         --   |         |        |
         --   --------------------
-
-        workGrid = named "Work grid"
-          $ avoidStruts
-          $ myGaps
-          $ (layoutN 2 (relBox 0.75 0 1 1) (Just $ relBox 0 0 1 1) (noBorders $ Tall 0 0 0.5))
-          $ layoutAll (relBox 0 0 0.75 1) noGapsTabs
-
-        coolGrid = named "Cool grid"
-          $ avoidStruts
-          $ myGaps
-          $ layoutN 1 (relBox 0 0 0.75 1) (Just $ relBox 0 0 1 1) Full
-          $ layoutN 1 (relBox 0.75 0 1 0.5) (Just $ relBox 0.5 0 1 1) Full
-          $ layoutAll (relBox 0.75 0.5 1 1) noGapsTabs
+        -- coolGrid = named "Cool grid"
+        --   $ avoidStruts
+        --   $ myGaps
+        --   $ layoutN 1 (relBox 0 0 0.75 1) (Just $ relBox 0 0 1 1) Full
+        --   $ layoutN 1 (relBox 0.75 0 1 0.5) (Just $ relBox 0.5 0 1 1) Full
+        --   $ layoutAll (relBox 0.75 0.5 1 1) noGapsTabs
 
         noGapsTabs = named "Tabs"
           $ tabbedBottom shrinkText myTabTheme
@@ -363,17 +384,21 @@ myLayout =
           $ tabbedBottom shrinkText myTabTheme
 
 myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
-    -- mod-button1 %! Set the window to floating mode and move by dragging
-    [ ((modMask, button1), \w -> focus w >> mouseMoveWindow w
-                                         >> windows W.shiftMaster)
-    -- mod-button2 %! Raise the window to the top of the stack
-    , (( modMask, button2), windows . (W.shiftMaster .) . W.focusWindow)
-    -- mod-button3 %! Set the window to floating mode and resize by dragging
-    , (( modMask, button3), \w -> focus w >> mouseResizeWindow w
-                                          >> windows W.shiftMaster)
-    , (( modMask, button4 ), const $ moveTo Prev $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag])
-    , (( modMask, button5 ), const $ moveTo Next $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag])
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
+    -- left click - set the window to floating
+    [ (( modMask, button1 ), \w -> focus w >> mouseMoveWindow w
+                                           >> windows W.shiftMaster)
+
+    -- right click - set the window to floating and resize
+    , (( modMask, button3 ), \w -> focus w >> mouseResizeWindow w
+                                           >> windows W.shiftMaster)
+
+    -- scroll to next/prev useful workspace (non empty and non scratchpad)
+    , (( modMask, button4 ), const $ windows W.focusUp)
+    , (( modMask, button5 ), const $ windows W.focusDown)
+
+    -- scroll to next/prev useful workspace (non empty and non scratchpad)
+    , (( modMask, 8 ), const $ moveTo Prev $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag])
+    , (( modMask, 9 ), const $ moveTo Next $ Not emptyWS :&: ignoringWSs [scratchpadWorkspaceTag])
     ]
 
 myMediaKeys =
@@ -389,24 +414,27 @@ myKeys =
     [ -----------
       -- Programs
       ((myMask,               xK_F2),     spawn myBrowser)
-    , ((myMask,               xK_Return), spawn myTerminal)
-    , ((myMask .|. shiftMask, xK_m),      spawn "pavucontrol")
-    , ((myMask,               xK_F12),    spawn "kitty -e bashmount")
+    , ((myMask,               xK_Return), safeSpawn myTerminal [])
+    , ((myMask .|. shiftMask, xK_m),      safeSpawn "pavucontrol" [])
+    , ((myMask,               xK_F12),    safeSpawn "kitty" ["-e", "bashmount"])
 
       -----------
       -- Rofi stuff
-    , ((myMask, xK_grave), spawn "rofi -show combi")
-    , ((myMask, xK_e),     spawn "rofi -show emoji")
-    , ((myMask, xK_c),     spawn "rofi -show calc -modi calc -no-show-match -no-sort")
+    , ((myMask, xK_r), spawn "rofi -show combi")
+    , ((myMask, xK_e), spawn "rofi -show emoji")
+    , ((myMask, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort")
 
       -----------
       -- Xmonad actions
     , ((myMask,               xK_BackSpace), kill)
-    , ((myMask .|. shiftMask, xK_BackSpace), killAll >> toggleRecentNonEmptyWS)
+    , ((myMask .|. shiftMask, xK_BackSpace), confirmPrompt myPromptTheme "close workspace?" $ killAll >> toggleRecentNonEmptyWS)
     , ((myMask,               xK_q),         spawn "xmonad --recompile && xmonad --restart") -- Recompile and restart Xmonad
+    , ((myMask .|. shiftMask, xK_q),         confirmPrompt myPromptTheme "exit?" $ io (exitWith ExitSuccess))
 
       -----------
       -- Layout actions
+    , ((myMask,               xK_k),            focusUp)
+    , ((myMask,               xK_j),            focusDown)
     , ((myMask,               xK_f),            sendMessage $ Toggle FULL) -- Toggle fullscreen
     , ((myMask,               xK_b),            toggleRecentNonEmptyWS ) -- go to most recent workspace
     , ((myMask .|. shiftMask, xK_Return),       windows W.swapMaster)     -- Swap the focused window and the master window
@@ -417,8 +445,8 @@ myKeys =
     , ((myMask .|. shiftMask, xK_v),            killAllOtherCopies)       -- Toggle window state back
     , ((myMask,               xK_t),            selectWindow myEasyMotionTheme >>= (`whenJust` windows . W.focusWindow))
     , ((myMask,               xK_s),            withFocused $ windows . W.sink) -- Push window back into tiling
-    , ((myMask,               xK_backslash),    withTaggedP "mpv" (W.shiftWin scratchpadWorkspaceTag))
-    , ((myMask .|. shiftMask, xK_backslash),    withTaggedGlobalP "mpv" shiftHere)
+    , ((myMask,               xK_slash),        markBoring) -- mark boring
+    , ((myMask .|. shiftMask, xK_slash),        clearBoring) -- mark boring
 
       -----------
       -- Screen shots & recording
@@ -430,43 +458,60 @@ myKeys =
 
       -----------
       -- Scratchpads
-    , ((myMask, xK_minus), namedScratchpadAction myScratchpads "terminal")
-    , ((myMask, xK_equal), namedScratchpadAction myScratchpads "telegram")
-    , ((myMask, xK_F10),   namedScratchpadAction myScratchpads "keepass")
+    , ((myMask, xK_minus),     namedScratchpadAction myScratchpads "terminal")
+    , ((myMask, xK_equal),     namedScratchpadAction myScratchpads "telegram")
+    , ((myMask, xK_m),         namedScratchpadAction myScratchpads "email")
+    , ((myMask, xK_F10),       namedScratchpadAction myScratchpads "keepass")
+    , ((myMask, xK_backslash), namedScratchpadAction myScratchpads "mpv")
 
       -----------
       -- Prompts
-    -- , ((myMask,                 xK_backslash), treeselectWorkspace myTreeConf myWorkspaces W.greedyView)
-    -- , ((myMask .|. controlMask, xK_backslash), treeselectWorkspace myTreeConf myWorkspaces W.shift)
-    -- , ((myMask .|. shiftMask,   xK_backslash), treeselectWorkspace myTreeConf myWorkspaces (\i -> W.greedyView i . W.shift i))
-
     , ((myMask,               xK_n), switchProjectPrompt myPromptTheme)
     , ((myMask .|. shiftMask, xK_n), shiftToProjectPrompt myPromptTheme)
 
-    -- , ((myMask .|. controlMask, xK_h), sendMessage $ pullGroup L)
-    -- , ((myMask .|. controlMask, xK_l), sendMessage $ pullGroup R)
-    -- , ((myMask .|. controlMask, xK_k), sendMessage $ pullGroup U)
-    -- , ((myMask .|. controlMask, xK_j), sendMessage $ pullGroup D)
-    --
-    -- , ((myMask .|. controlMask, xK_m), withFocused (sendMessage . MergeAll))
-    -- , ((myMask .|. controlMask, xK_u), withFocused (sendMessage . UnMerge))
-
-    -- , ((myMask .|. controlMask, xK_period), onGroup W.focusown')
-    -- , ((myMask .|. controlMask, xK_comma), onGroup W.focusUp')
+    -- Navigate between windows in a group
+    , ((myMask,               xK_quoteright), onGroup W.focusDown')
+    , ((myMask,               xK_o),          onGroup W.focusUp')
+    -- Merge windows in a group
+    --   push the current group into the next group
+    , ((myMask,               xK_End),       sendMessage $ pushGroup D)
+    --   merges a current window with a master window
+    --   FIXME: works only when a focused window is in the top right corner
+    --          meaning it is the next after the master group, otherwise it
+    --          pulls master into itself
+    , ((myMask,               xK_Home),      do withFocused mergeToMaster
+                                                windows W.focusDown)
+    , ((myMask,               xK_u),         withFocused (sendMessage . UnMerge))
     ]
-    -- ++
-    -- [ ((m .|. myMask, k), windows $ f i) | (i, k) <- zip myWorkspaces [xK_1 .. xK_9]
-    -- , (f, m) <- [ (W.greedyView, 0)
-    --             , (W.shift, shiftMask)
-    --             , (\i -> W.greedyView i . W.shift i, controlMask)
-    --             ]
-    -- ]
     where
+    toggleTag name = withFocused $ \w ->
+      hasTag name w >>= (\b -> if b then delTag name w else addTag name w)
+
+    mergeToMaster :: Window -> X ()
+    mergeToMaster win = do
+      master <- getMaster
+      (`whenJust` sendMessage . SL.Merge win) master
+      return ()
+      where
+      getMaster = do
+        stack <- currentStack
+        return $ case stack of
+          Just s -> getMasterWindow s
+          _      -> Nothing
+
+    currentStack :: X (Maybe (W.Stack Window))
+    currentStack = gets (W.stack . W.workspace . W.current . windowset)
+
+    getMasterWindow :: W.Stack Window -> Maybe Window
+    getMasterWindow s = case s of
+      W.Stack _ l _  -> Just $ head $ reverse l
+      W.Stack _ _ _  -> Nothing
+
     centerWindow :: Window -> X ()
     centerWindow win = do
-        (_, W.RationalRect x y w h) <- floatLocation win
-        windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
-        return ()
+      (_, W.RationalRect x y w h) <- floatLocation win
+      windows $ W.float win (W.RationalRect ((1 - w) / 2) ((1 - h) / 2) w h)
+      return ()
 
 unusedKeys =
   ["M-" ++ [n] | n <- ['1'..'9']]
@@ -525,6 +570,7 @@ main' dbus = xmonad $ docks $ urgencyHook $ ewmh $ dynamicProjects projects def
   , focusedBorderColor = myFocusedBorderColor
   , terminal           = myTerminal
   , modMask            = myMask
+  , handleEventHook    = handleEventHook def <+> fullscreenEventHook
   , manageHook         = myManageHook
   , layoutHook         = myLayout
   , logHook            = myPolybarLogHook dbus
@@ -533,8 +579,10 @@ main' dbus = xmonad $ docks $ urgencyHook $ ewmh $ dynamicProjects projects def
   , workspaces         = myWorkspaces
   , mouseBindings      = myMouseBindings
   }
+  `removeKeysP`     unusedKeys
   `additionalKeys`  myKeys
   `additionalKeysP` myMediaKeys
-  `removeKeysP`     unusedKeys
   where
     urgencyHook = withUrgencyHook LibNotifyUrgencyHook
+
+-- vim:filetype=haskell tabstop=2 shiftwidth=2
