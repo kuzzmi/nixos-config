@@ -146,6 +146,7 @@ in {
         xclip
         xorg.xev
         libusb
+        blueman
 
         # To talk to iPhone
         libimobiledevice
@@ -162,7 +163,7 @@ in {
         # Creative
         obs-studio
         audacity
-        ocenaudio
+        # ocenaudio
         lwks2022
         gimp
         inkscape
@@ -224,8 +225,8 @@ in {
 
       keyboard = {
         model = "pc105";
-        layout = "us,ua,ru";
-        variant = "colemak,winkeys,winkeys";
+        layout = "us,ua";
+        variant = "colemak,winkeys";
         options = [ "grp:shifts_toggle" ];
         # options = [ "grp:shifts_toggle" "caps:escape" ];
       };
@@ -241,10 +242,11 @@ in {
           ".arduino15"                   # To not redownload Arduino stuff
           ".electrum"                    # Cryptooo
           ".audacity"                    # Audacity
-          ".cache/ocenaudio"             # Ocenaudio temp cache
+          # ".cache/ocenaudio"             # Ocenaudio temp cache
           ".config/Android Open Source Project" # Android Emulator
           ".config/Authy Desktop"        # Authy settings
           ".config/audacity"             # Audacity
+          ".config/obs-studio"           # OBS studio settings/plugins
           ".config/configstore"          # ConfigStore settings (npm package for binaries)
           ".config/Google"               # Android Studio settings
           ".config/google-chrome"        # Google Chrome profiles
@@ -293,16 +295,6 @@ in {
         player=mpv --cache 2048
         player-no-close
       '';
-    };
-
-    xdg.mimeApps = {
-      enable = true;
-      defaultApplications = {
-        "text/html" = ["google-chrome.desktop"];
-        "application/pdf" = ["evince.desktop"];
-        "inode/directory" = ["ranger.desktop"];
-        "application/x-directory" = ["ranger.desktop"];
-      };
     };
 
     services.xcape = {

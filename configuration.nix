@@ -22,6 +22,11 @@ in {
     wireless = {
       enable = true;
       userControlled.enable = true;
+      networks = {
+        SLAVA_UKRAYINI = {
+          pskRaw = "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
+	};
+      };
     };
     interfaces = {
       enp5s0.useDHCP = true;
@@ -53,6 +58,7 @@ in {
   hardware = {
     pulseaudio.enable = true;
     openrazer.enable = true;
+    bluetooth.enable = true;
   };
 
   users.mutableUsers = false;
