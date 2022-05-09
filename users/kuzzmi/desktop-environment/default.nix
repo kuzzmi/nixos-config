@@ -5,7 +5,7 @@ let
 in
 {
   imports = [
-    ./alacritty/default.nix
+    # ./alacritty/default.nix
     ./kitty/default.nix
     ./xmonad/default.nix
     ./rofi/default.nix

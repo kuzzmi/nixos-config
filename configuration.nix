@@ -58,7 +58,7 @@ in {
   hardware = {
     pulseaudio.enable = true;
     openrazer.enable = true;
-    bluetooth.enable = true;
+    # bluetooth.enable = true;
   };
 
   users.mutableUsers = false;
@@ -79,7 +79,7 @@ in {
 	    Option         "TripleBuffer" "on"
       '';
     };
-    dbus.packages = [];
+    dbus.packages = with pkgs; [ dconf ];
     gnome.gnome-keyring.enable = true;
   };
 

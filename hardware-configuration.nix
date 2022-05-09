@@ -11,8 +11,16 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelParams = [ "nvidia-drm.modeset=1" ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [ "kvm-intel" "v4l2loopback" ];
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.v4l2loopback
+  ];
+
+  boot.extraModprobeConfig = ''
+    # exclusive_caps: Skype, Zoom, Teams etc. will only show device when actually streaming
+    # card_label: Name of virtual camera, how it'll show up in Skype, Zoom, Teams
+    options v4l2loopback exclusive_caps=1
+  '';
 
   fileSystems."/" =
     { device = "none";

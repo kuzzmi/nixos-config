@@ -10,63 +10,52 @@ let
   impermanence = builtins.fetchTarball {
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
-  rubik = (import ./pkgs/fonts/rubik.nix);
+  iriun = (import ./pkgs/applications/iriun/default.nix);
   lwks2022 = (import ./pkgs/applications/lightworks_2022.nix);
 in {
   age = {
     identityPaths = [ /nix/persist/home/kuzzmi/.ssh/id_rsa ];
     secrets.nas.file = ./secrets/nas.age;
   };
+
   imports = [
     "${home-manager}/nixos"
     ./nas-mounts.nix
   ];
+
   home-manager.users.kuzzmi = { ... }: {
     imports = [
       "${impermanence}/home-manager.nix"
       ./desktop-environment/default.nix
-      ./programs/tmux/default.nix
       ./programs/git/default.nix
       ./programs/zsh/default.nix
       ./programs/nvim/default.nix
-      ./programs/gpg/default.nix
       ./programs/ranger/default.nix
-      # ./services/redshift/default.nix
       ./services/picom/default.nix
+      # ./programs/tmux/default.nix
+      # ./programs/gpg/default.nix
+      # ./services/redshift/default.nix
     ];
 
-    services.gnome-keyring.enable = true;
-    services.gpg-agent.enable = true;
-    services.lorri.enable = true;
+    services = {
+      gnome-keyring.enable = true;
+      gpg-agent.enable = true;
+      lorri.enable = true;
+      xcape = {
+        enable = true;
+        timeout = 250;
+        mapExpression = {
+          Super_L = "Escape";
+          Escape = "~";
+        };
+      };
+    };
+
     programs.home-manager.enable = true;
 
     desktopEnvironment = {
       enable = true;
       colors = {
-        # primary = {
-        #   background = "#2D2D2D";
-        #   foreground = "#D3D0C8";
-        # };
-        # normal = {
-        #   black   = "#2D2D2D";
-        #   red     = "#F2777A";
-        #   green   = "#99CC99";
-        #   yellow  = "#FFCC66";
-        #   blue    = "#6699CC";
-        #   magenta = "#CC99CC";
-        #   cyan    = "#66CCCC";
-        #   white   = "#D3D0C8";
-        # };
-        # bright = {
-        #   black   = "#747369";
-        #   red     = "#F2777A";
-        #   green   = "#99CC99";
-        #   yellow  = "#FFCC66";
-        #   blue    = "#6699CC";
-        #   magenta = "#CC99CC";
-        #   cyan    = "#66CCCC";
-        #   white   = "#FFFFFF";
-        # };
         primary = {
           background = "#1d1f21";
           foreground = "#c5c8c6";
@@ -106,9 +95,9 @@ in {
       };
       fonts = {
         sans = {
-          name = "Open Sans";
+          name = "Rubik";
           size = 12;
-          package = pkgs.open-sans;
+          package = pkgs.rubik;
         };
         mono = {
           name = "JetBrainsMono";
@@ -119,6 +108,7 @@ in {
 
     home = {
       username = "kuzzmi";
+
       packages = with pkgs; [
         # Browsers
         google-chrome
@@ -130,6 +120,7 @@ in {
         qt5ct
 
         # Utilities
+        git
         silver-searcher
         fzf
         pavucontrol
@@ -141,12 +132,16 @@ in {
         yq
         udisks
         bashmount
-        gphoto2 # To capture LiveView from camera
         dconf
         xclip
         xorg.xev
         libusb
         blueman
+        gparted
+        cryptsetup
+
+        # iOS as a webcam
+        iriun
 
         # To talk to iPhone
         libimobiledevice
@@ -158,12 +153,10 @@ in {
         youtube-dl
         mpv
         vlc
-        streamlink
 
         # Creative
         obs-studio
         audacity
-        # ocenaudio
         lwks2022
         gimp
         inkscape
@@ -172,12 +165,10 @@ in {
         keepassxc
         libsecret
         gnome.seahorse
-        # authy
         openvpn
 
         # Crypto
         electrum
-        # ethminer
 
         # Commmunication
         skypeforlinux
@@ -191,8 +182,8 @@ in {
         evince # PDF viewer
         transmission
         razergenie
-        calibre
-        lutris
+        # calibre # ebook manager
+        lutris # games installer
 
         # Screen shots / screen recordings
         flameshot
@@ -204,6 +195,7 @@ in {
         material-design-icons
         rubik
         roboto
+        paratype-pt-sans
 
         # Fin
         ledger
@@ -227,8 +219,8 @@ in {
         model = "pc105";
         layout = "us,ua";
         variant = "colemak,winkeys";
-        options = [ "grp:shifts_toggle" ];
-        # options = [ "grp:shifts_toggle" "caps:escape" ];
+        options = [ "grp:shifts_toggle" "caps:escape" ];
+        # options = [ "grp:shifts_toggle" ];
       };
 
       persistence."/nix/persist/home/kuzzmi" = {
@@ -242,7 +234,6 @@ in {
           ".arduino15"                   # To not redownload Arduino stuff
           ".electrum"                    # Cryptooo
           ".audacity"                    # Audacity
-          # ".cache/ocenaudio"             # Ocenaudio temp cache
           ".config/Android Open Source Project" # Android Emulator
           ".config/Authy Desktop"        # Authy settings
           ".config/audacity"             # Audacity
@@ -252,7 +243,6 @@ in {
           ".config/google-chrome"        # Google Chrome profiles
           ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
           ".config/Slack"                # Slack stuff
-          # ".config/yarn"                 # yarn binaries
           ".config/mpv"                  # mpv config
           ".config/zsh"                  # Zsh history
           ".config/Mailspring"           # Email
@@ -272,11 +262,8 @@ in {
           ".local/data/pgsql"            # postgresql data
           ".ssh"
           ".ntcardvt-wrapped"            # lightworks settings
-          ".local/share/Meltytech/Shotcut/" # Shotcut settings
-          # ".yarn"
 
           # Steam
-          # ".steam"
           ".local/share/Steam"
           ".factorio"
         ];
@@ -284,36 +271,33 @@ in {
           ".fehbg"
         ];
       };
-
-      file.".xbindkeysrc".text = ''
-        "xdotool key Escape && sleep 0.5 && xdotool mousemove 1913 941 && xdotool click 1 && sleep 2 && xdotool key Return"
-          Scroll_Lock
-      '';
-
-      file.".config/streamlink/config".text = ''
-        # Player options
-        player=mpv --cache 2048
-        player-no-close
-      '';
     };
+  };
 
-    services.xcape = {
+  systemd.services.keychron-params = {
+    enable = true;
+    description = "The command to make the Keychron K12 work correctly";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/bin/sh -c \"echo 0 > /sys/module/hid_apple/parameters/fnmode\" && /bin/sh -c \"echo 1 > /sys/module/hid_apple/parameters/swap_opt_cmd\"";
+    };
+    wantedBy = [ "default.target" ];
+  };
+
+  services = {
+    # Enables startx script with Xmonad.
+    # NOTE: Can't be loaded as a part of the Home Manager.
+    xserver.displayManager = {
+      defaultSession = "startx+xmonad";
+      startx.enable = true;
+    };
+    usbmuxd.enable = true;
+    # TODO: move this to iriun derivation
+    # Needed for iriun
+    avahi = {
       enable = true;
-      timeout = 250;
-      mapExpression = {
-        Super_L = "Escape";
-      };
     };
   };
-
-  # Enables startx script with Xmonad.
-  # NOTE: Can't be loaded as a part of the Home Manager.
-  services.xserver.displayManager = {
-    defaultSession = "startx+xmonad";
-    startx.enable = true;
-  };
-
-  services.usbmuxd.enable = true;
 
   users = {
     extraGroups.vboxusers.members = [ "kuzzmi" ];

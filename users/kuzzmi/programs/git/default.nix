@@ -21,6 +21,11 @@
       core = {
         editor = "nvim";
       };
+      safe = {
+        directory = [
+          "/nix/persist/etc/nixos"
+        ];
+      };
       url = {
         "git@bitbucket.org:" = {
           insteadOf = "https://bitbucket.org/";
