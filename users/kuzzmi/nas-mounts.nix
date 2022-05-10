@@ -3,12 +3,12 @@ let
   credentials = config.age.secrets.nas.path;
   mounts = [
     { local = "Backups"; remote = "Backups"; }
-    # { local = "Containers"; remote = "ContainerData"; }
     { local = "Downloads"; remote = "Download"; }
     { local = "Documents"; remote = "Documents"; }
     { local = "Multimedia"; remote = "Multimedia"; }
-    # { local = "Public"; remote = "Public"; }
     { local = "Private"; remote = "Private"; }
+    # { local = "Public"; remote = "Public"; }
+    # { local = "Containers"; remote = "ContainerData"; }
   ];
   mount = { local, remote }: {
     fileSystems."/home/kuzzmi/${local}" = {

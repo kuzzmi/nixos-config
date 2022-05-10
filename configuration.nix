@@ -19,10 +19,14 @@ in {
   networking = {
     useDHCP = false;
     enableIPv6 = false;
+    networkmanager.enable = true;
     wireless = {
       enable = true;
       userControlled.enable = true;
       networks = {
+        "Igor's iPhone" = {
+          pskRaw = "73b280b4015241cf2103745269dfe4b7a2a895818a1a0d646680eaaae6c1f03d";
+	};
         SLAVA_UKRAYINI = {
           pskRaw = "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
 	};

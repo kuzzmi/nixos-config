@@ -138,7 +138,8 @@ in {
         libusb
         blueman
         gparted
-        cryptsetup
+        cryptsetup # work with luks
+        rclone     # to mount folders from pCloud
 
         # iOS as a webcam
         iriun
@@ -168,7 +169,7 @@ in {
         openvpn
 
         # Crypto
-        electrum
+        # electrum
 
         # Commmunication
         skypeforlinux
@@ -207,7 +208,7 @@ in {
         gnumake
         dbeaver
         google-cloud-sdk
-        android-studio
+        # android-studio
         docker-compose
         postman
         arduino-cli
@@ -230,16 +231,16 @@ in {
           "Pictures"                     # Wallpapers, sketches etc
           "Videos"                       # Local videos
           "VirtualBox VMs"               # Virtual machines
-          "Android"                      # To not redownload Android binaries every time
+          # "Android"                      # To not redownload Android binaries every time
           ".arduino15"                   # To not redownload Arduino stuff
-          ".electrum"                    # Cryptooo
+          # ".electrum"                    # Cryptooo
           ".audacity"                    # Audacity
-          ".config/Android Open Source Project" # Android Emulator
+          # ".config/Android Open Source Project" # Android Emulator
           ".config/Authy Desktop"        # Authy settings
           ".config/audacity"             # Audacity
           ".config/obs-studio"           # OBS studio settings/plugins
           ".config/configstore"          # ConfigStore settings (npm package for binaries)
-          ".config/Google"               # Android Studio settings
+          # ".config/Google"               # Android Studio settings
           ".config/google-chrome"        # Google Chrome profiles
           ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
           ".config/Slack"                # Slack stuff
@@ -250,10 +251,11 @@ in {
           ".config/pulse"                # PulseAudio settings
           ".config/Postman"              # Postman settings
           ".config/nextjs-nodejs"        # NextJS settings
-          ".local/share/Android Open Source Project" # Android Emulator
+          ".config/rclone"               # rclone settings
+          # ".local/share/Android Open Source Project" # Android Emulator
           ".local/share/applications"    # drun shortcuts
           ".local/share/DBeaverData"     # dbeaver settings
-          ".local/share/Google"          # Android Studio settings
+          # ".local/share/Google"          # Android Studio settings
           ".local/share/keyrings"        # security keyrings
           ".local/share/ranger"          # ranger stuff
           ".local/share/TelegramDesktop" # Telegram settings
