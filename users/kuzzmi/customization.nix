@@ -4,13 +4,6 @@ let
   cfg = config.customization;
 in
 {
-  imports = [
-    ./kitty/default.nix
-    ./xmonad/default.nix
-    ./rofi/default.nix
-    ./polybar/default.nix
-    ./dunst/default.nix
-  ];
   options.customization = {
     enable = mkEnableOption "Enable desktop environment";
     theme = {

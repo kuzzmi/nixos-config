@@ -8,7 +8,6 @@ in {
   imports =
     [
       "${impermanence}/nixos.nix"
-      "${agenix}/modules/age.nix"
       ./common-configuration.nix
       ./hardware-configuration.nix
     ];

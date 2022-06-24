@@ -1,7 +1,7 @@
 { config, ... }:
 let
-  colors = config.desktopEnvironment.colors;
-  fonts = config.desktopEnvironment.fonts;
+  colors = config.customization.colors;
+  fonts = config.customization.fonts;
 in
 {
   services.dunst = {

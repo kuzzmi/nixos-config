@@ -1,8 +1,8 @@
 { pkgs, config, ... }:
 let
-  fonts = config.desktopEnvironment.fonts;
-  colors = config.desktopEnvironment.colors;
-  icons = config.desktopEnvironment.iconTheme.name;
+  fonts = config.customization.fonts;
+  colors = config.customization.colors;
+  icons = config.customization.iconTheme.name;
 in
 {
   programs.rofi = {
