@@ -13,8 +13,8 @@ final: prev:
     src = prev.fetchFromGitHub {
       owner  = "ledger";
       repo   = "ledger";
-      rev    = "460a5661ac20789aa578dc9fb20f3a1ed47e5699";
-      sha256 = "10ysvyyj9c0i0rjvb6iz4vckfwfisb5z6kia7sz9ilsjvxy57w7v";
+      rev    = "61ffed6ece4857fe5e708f5c3bd6d7e6d2b2b13b";
+      sha256 = "sha256-bOKoqb1L+T0yGf4AK5rHyojaUyelho9SSrGIOTjAgt8=";
     };
   });
 

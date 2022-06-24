@@ -19,19 +19,17 @@ in {
   networking = {
     useDHCP = false;
     enableIPv6 = false;
-    networkmanager.enable = true;
+    # networkmanager.enable = true;
     wireless = {
       enable = true;
       userControlled.enable = true;
       networks = {
-        "Igor's iPhone" = {
-          pskRaw = "73b280b4015241cf2103745269dfe4b7a2a895818a1a0d646680eaaae6c1f03d";
-	};
         SLAVA_UKRAYINI = {
           pskRaw = "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
 	};
       };
     };
+    firewall.allowedTCPPorts = [ 22 5000 3000 ];
     interfaces = {
       enp5s0.useDHCP = true;
       # enp0s20f0u6c4i2.useDHCP = true;
@@ -62,7 +60,7 @@ in {
   hardware = {
     pulseaudio.enable = true;
     openrazer.enable = true;
-    # bluetooth.enable = true;
+    bluetooth.enable = true;
   };
 
   users.mutableUsers = false;
@@ -85,6 +83,9 @@ in {
     };
     dbus.packages = with pkgs; [ dconf ];
     gnome.gnome-keyring.enable = true;
+    openssh = {
+      enable = true;
+    };
   };
 
   environment = {
@@ -97,6 +98,7 @@ in {
     persistence."/nix/persist" = {
       directories = [
         "/var/log"
+        "/var/lib/docker"
         "/var/db/sudo"
         "/etc/nixos"
       ];
@@ -107,6 +109,7 @@ in {
   };
 
   programs.steam.enable = true;
+  programs.mosh.enable = true;
 
   system.stateVersion = "21.05";
 }

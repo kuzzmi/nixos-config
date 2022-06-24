@@ -276,7 +276,7 @@ myManageHook =
         -- , name      =? "discord"    --> doShift wsCOM
         -- , className =? "Mailspring" --> doShift wsCOM
 
-        , className =? "mpv"                  --> (doRectFloat $ W.RationalRect 0.745 0.0465 0.25 0.25)
+        -- , className =? "mpv"                  --> (doRectFloat $ W.RationalRect 0.745 0.0465 0.25 0.25)
         , role      =? "GtkFileChooserDialog" --> (doRectFloat $ centeredS)
         , className =? "Pavucontrol"          --> (doRectFloat $ centeredS) <+> doF copyToAll
         , className =? "Seahorse"             --> (doRectFloat $ centeredS)
@@ -303,7 +303,7 @@ myScratchpads =
     [ NS "telegram" "telegram-desktop" ((className =? "Telegram") <||> (className =? "telegram-desktop") <||> (className =? "TelegramDesktop")) (customFloating $ centered)
     , NS "terminal" "kitty -T kitty-scratch" (title =? "kitty-scratch") (customFloating $ centered)
     , NS "email" "mailspring" ((className =? "mailspring") <||> (className =? "Mailspring")) (customFloating $ centered)
-    , NS "mpv" "mpv $(xclip -o)" ((className =? "mpv") <||> (className =? "mpv")) (customFloating $ corner)
+    -- , NS "mpv" "mpv $(xclip -o)" ((className =? "mpv") <||> (className =? "mpv")) (customFloating $ corner)
     , NS "keepass" "secret-tool lookup keepass database | keepassxc --pw-stdin ~/Private/Passwords.kdbx" (className =? "KeePassXC") (customFloating $ centered)
     ]
 
@@ -461,8 +461,8 @@ myKeys =
     , ((myMask, xK_minus),     namedScratchpadAction myScratchpads "terminal")
     , ((myMask, xK_equal),     namedScratchpadAction myScratchpads "telegram")
     , ((myMask, xK_m),         namedScratchpadAction myScratchpads "email")
-    , ((myMask, xK_F10),       namedScratchpadAction myScratchpads "keepass")
-    , ((myMask, xK_backslash), namedScratchpadAction myScratchpads "mpv")
+    , ((myMask, xK_0),         namedScratchpadAction myScratchpads "keepass")
+    -- , ((myMask, xK_backslash), namedScratchpadAction myScratchpads "mpv")
 
       -----------
       -- Prompts

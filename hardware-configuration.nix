@@ -25,7 +25,7 @@
   fileSystems."/" =
     { device = "none";
       fsType = "tmpfs";
-      options = [ "defaults" "size=12G" "mode=755" ];
+      options = [ "defaults" "size=8G" "mode=755" ];
     };
 
   fileSystems."/boot" =
@@ -40,6 +40,11 @@
 
   fileSystems."/nix/persist/home" =
     { device = "/dev/disk/by-uuid/d0d03a88-0e56-4cf1-a054-470f5f8131ed";
+      fsType = "ext4";
+    };
+
+  fileSystems."/home/kuzzmi/Videos" =
+    { device = "/dev/disk/by-uuid/c9451243-a420-446d-bd35-060b6c8a0925";
       fsType = "ext4";
     };
 

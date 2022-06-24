@@ -5,12 +5,12 @@ let
 in
 {
   imports = [
-    # ./alacritty/default.nix
     ./kitty/default.nix
     ./xmonad/default.nix
     ./rofi/default.nix
     ./polybar/default.nix
     ./dunst/default.nix
+    # ./alacritty/default.nix
     # ./xmobar/default.nix
   ];
   options.desktopEnvironment = {

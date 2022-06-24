@@ -32,7 +32,7 @@ in {
       ./programs/nvim/default.nix
       ./programs/ranger/default.nix
       ./services/picom/default.nix
-      # ./programs/tmux/default.nix
+      ./programs/tmux/default.nix
       # ./programs/gpg/default.nix
       # ./services/redshift/default.nix
     ];
@@ -107,12 +107,20 @@ in {
     };
 
     home = {
+      stateVersion = "22.11";
+
       username = "kuzzmi";
 
       packages = with pkgs; [
         # Browsers
         google-chrome
         tor
+
+        # Documents and productivity
+        libreoffice
+        evince # PDF viewer
+        joplin
+        joplin-desktop
 
         # Customizations
         feh
@@ -125,6 +133,7 @@ in {
         fzf
         pavucontrol
         unzip
+        p7zip
         entr    # monitor changes
         direnv  # directory-specific envs
         xbindkeys
@@ -158,6 +167,7 @@ in {
         # Creative
         obs-studio
         audacity
+        shotcut
         lwks2022
         gimp
         inkscape
@@ -179,8 +189,6 @@ in {
         mailspring
 
         # Misc
-        libreoffice
-        evince # PDF viewer
         transmission
         razergenie
         # calibre # ebook manager
@@ -199,7 +207,7 @@ in {
         paratype-pt-sans
 
         # Fin
-        ledger
+        # ledger
         fava
         gnuplot_qt
 
@@ -229,7 +237,7 @@ in {
         directories = [
           "Projects"                     # Pet and work projects
           "Pictures"                     # Wallpapers, sketches etc
-          "Videos"                       # Local videos
+          # "Videos"                       # Local videos
           "VirtualBox VMs"               # Virtual machines
           # "Android"                      # To not redownload Android binaries every time
           ".arduino15"                   # To not redownload Arduino stuff
@@ -283,7 +291,7 @@ in {
       Type = "oneshot";
       ExecStart = "/bin/sh -c \"echo 0 > /sys/module/hid_apple/parameters/fnmode\" && /bin/sh -c \"echo 1 > /sys/module/hid_apple/parameters/swap_opt_cmd\"";
     };
-    wantedBy = [ "default.target" ];
+    wantedBy = [ "multi-user.target" ];
   };
 
   services = {
@@ -305,7 +313,7 @@ in {
     extraGroups.vboxusers.members = [ "kuzzmi" ];
     users.kuzzmi = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" ];
+      extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" "networkmanager" ];
       shell = pkgs.zsh;
 
       # Dummy password to use on initial system loading
