@@ -7,9 +7,6 @@ let
   home-manager = builtins.fetchTarball {
     url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   };
-  impermanence = builtins.fetchTarball {
-    url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
-  };
   iriun = (import ./pkgs/applications/iriun/default.nix);
   lwks2022 = (import ./pkgs/applications/lightworks_2022.nix);
 in {
@@ -26,30 +23,17 @@ in {
   home-manager.users.kuzzmi = { ... }: {
     imports = [
       "${impermanence}/home-manager.nix"
-      ./desktop-environment/default.nix
+      ./customization.nix
+
+      ./services/picom/default.nix
+
+      # platform agnostic
       ./programs/git/default.nix
       ./programs/zsh/default.nix
       ./programs/nvim/default.nix
       ./programs/ranger/default.nix
-      ./services/picom/default.nix
       ./programs/tmux/default.nix
-      # ./programs/gpg/default.nix
-      # ./services/redshift/default.nix
     ];
-
-    services = {
-      gnome-keyring.enable = true;
-      gpg-agent.enable = true;
-      lorri.enable = true;
-      xcape = {
-        enable = true;
-        timeout = 250;
-        mapExpression = {
-          Super_L = "Escape";
-          Escape = "~";
-        };
-      };
-    };
 
     programs.home-manager.enable = true;
 

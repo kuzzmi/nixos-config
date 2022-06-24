@@ -1,7 +1,7 @@
 { lib, pkgs, config, ... }:
 with lib;
 let
-  cfg = config.desktopEnvironment;
+  cfg = config.customization;
 in
 {
   imports = [
@@ -10,10 +10,8 @@ in
     ./rofi/default.nix
     ./polybar/default.nix
     ./dunst/default.nix
-    # ./alacritty/default.nix
-    # ./xmobar/default.nix
   ];
-  options.desktopEnvironment = {
+  options.customization = {
     enable = mkEnableOption "Enable desktop environment";
     theme = {
       name = mkOption {
@@ -163,6 +161,7 @@ in
     #     '';
     #   };
     #
+
     home.sessionVariables = {
       QT_QPA_PLATFORMTHEME = "qt5ct";
     };

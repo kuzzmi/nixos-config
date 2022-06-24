@@ -4,22 +4,18 @@ let
   impermanence = builtins.fetchTarball {
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
-  agenix = builtins.fetchTarball {
-    url = "https://github.com/ryantm/agenix/archive/main.tar.gz";
-  };
 in {
   imports =
     [
       "${impermanence}/nixos.nix"
       "${agenix}/modules/age.nix"
+      ./common-configuration.nix
       ./hardware-configuration.nix
-      ./users/kuzzmi/default.nix
     ];
 
   networking = {
     useDHCP = false;
     enableIPv6 = false;
-    # networkmanager.enable = true;
     wireless = {
       enable = true;
       userControlled.enable = true;
@@ -32,7 +28,6 @@ in {
     firewall.allowedTCPPorts = [ 22 5000 3000 ];
     interfaces = {
       enp5s0.useDHCP = true;
-      # enp0s20f0u6c4i2.useDHCP = true;
       wlo1.useDHCP = true;
     };
   };
@@ -50,7 +45,6 @@ in {
     efi.canTouchEfiVariables = true;
   };
 
-  time.timeZone = "Europe/Kiev";
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     keyMap = "colemak";
@@ -64,13 +58,6 @@ in {
   };
 
   users.mutableUsers = false;
-
-  nixpkgs.config = {
-    allowUnfree = true;
-    permittedInsecurePackages = [
-      "electron-9.4.4"
-    ];
-  };
 
   services = {
     xserver = {
@@ -89,12 +76,6 @@ in {
   };
 
   environment = {
-    systemPackages = with pkgs; [
-      neovim
-      ranger
-      (pkgs.callPackage "${agenix}/pkgs/agenix.nix" {})
-    ];
-
     persistence."/nix/persist" = {
       directories = [
         "/var/log"
@@ -108,8 +89,11 @@ in {
     };
   };
 
-  programs.steam.enable = true;
-  programs.mosh.enable = true;
+  programs = {
+    steam.enable = true;
+    mosh.enable = true;
+  };
+
 
   system.stateVersion = "21.05";
 }
