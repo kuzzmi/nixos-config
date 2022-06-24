@@ -64,18 +64,6 @@ in {
           white   = "#c5c8c6";
         };
       };
-      theme = {
-        name = "Qogir-light";
-        package = pkgs.qogir-theme;
-      };
-      iconTheme = {
-        package = pkgs.qogir-icon-theme;
-        name = "Qogir-dark";
-      };
-      cursor = {
-        name = "Qogir";
-        size = 48;
-      };
       fonts = {
         sans = {
           name = "Rubik";
@@ -95,6 +83,12 @@ in {
       username = "kuzzmi";
 
       packages = with pkgs; [];
+    };
+  };
+
+  users = {
+    users.kuzzmi = {
+      shell = pkgs.zsh;
     };
   };
 }

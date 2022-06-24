@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.customization;
+  inherit (pkgs) stdenv;
 in
 {
   options.customization = {
@@ -118,7 +119,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (all (x: x == true) [ cfg.enable stdenv.isLinux ]) {
     gtk = with pkgs; {
       enable = true;
       font = {

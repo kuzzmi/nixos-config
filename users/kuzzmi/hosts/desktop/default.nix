@@ -31,6 +31,21 @@ in {
       ./programs/dunst/default.nix
     ];
 
+    customization = {
+      theme = {
+        name = "Qogir-light";
+        package = pkgs.qogir-theme;
+      };
+      iconTheme = {
+        package = pkgs.qogir-icon-theme;
+        name = "Qogir-dark";
+      };
+      cursor = {
+        name = "Qogir";
+        size = 48;
+      };
+    };
+
     services = {
       gnome-keyring.enable = true;
       gpg-agent.enable = true;
