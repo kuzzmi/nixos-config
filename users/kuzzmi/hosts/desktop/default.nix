@@ -61,10 +61,6 @@ in {
     };
 
     home = {
-      stateVersion = "22.11";
-
-      username = "kuzzmi";
-
       packages = with pkgs; [
         # Browsers
         google-chrome
@@ -82,8 +78,6 @@ in {
         qt5ct
 
         # Utilities
-        git
-        silver-searcher
         fzf
         pavucontrol
         unzip

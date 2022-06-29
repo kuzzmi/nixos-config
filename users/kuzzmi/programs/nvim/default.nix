@@ -43,6 +43,7 @@ in {
       ''
     ];
     extraPackages = with pkgs; [
+      silver-searcher
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];

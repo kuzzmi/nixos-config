@@ -82,9 +82,42 @@ in {
 
       username = "kuzzmi";
 
-      packages = with pkgs; [];
+      packages = with pkgs; [
+        # Utilities
+        fzf
+        p7zip
+        direnv
+
+        # Media
+        youtube-dl
+
+        # Commmunication
+        slack
+
+        # Misc
+        # transmission
+
+        # Fonts
+        # jetbrains-mono
+        # font-awesome
+        # material-design-icons
+        # rubik
+        # roboto
+        # paratype-pt-sans
+
+        # # Dev
+        # gh
+        # gnumake
+        # dbeaver
+        # google-cloud-sdk
+        # # android-studio
+        # # docker-compose
+        # postman
+      ];
     };
   };
+
+  fonts.fontDir.enable = true;
 
   users = {
     users.kuzzmi = {

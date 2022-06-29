@@ -1,5 +1,7 @@
 { config, pkgs, ... } :
-{
+let
+  inherit (pkgs) stdenv;
+in {
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -11,9 +13,9 @@
       tmux = "tmux -u";
       ll = "ls -l";
       le = "ledger --no-pager -f ~/Documents/Finances/ledger/ledger.dat";
-      up = "sudo nixos-rebuild switch";
+      up = if stdenv.isLinux then "sudo nixos-rebuild switch" else "darwin-rebuild switch";
       nre = "sudo nvim /etc/nixos/configuration.nix";
-      nreu = "nvim /etc/nixos/users/kuzzmi/default.nix";
+      nreu = "nvim ${if stdenv.isLinux then "/etc/nixos" else "/home/kuzzmi/.nixpkgs"}/users/kuzzmi/default.nix";
       agenix = "RULES=/etc/nixos/users/kuzzmi/secrets/rules.nix agenix";
     };
     oh-my-zsh = {
