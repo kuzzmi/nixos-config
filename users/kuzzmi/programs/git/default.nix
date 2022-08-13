@@ -24,6 +24,7 @@
       safe = {
         directory = [
           "/nix/persist/etc/nixos"
+          "/etc/nixos"
         ];
       };
       url = {

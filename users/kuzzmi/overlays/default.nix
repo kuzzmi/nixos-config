@@ -33,6 +33,28 @@ final: prev:
     ];
   });
 
+  ndi = prev.ndi.overrideAttrs (old: rec {
+    fullVersion = "5.5.0";
+    version = builtins.head (builtins.splitVersion fullVersion);
+    src = prev.requireFile {
+      name    = "Install_NDI_SDK_v5_Linux.tar.gz";
+      sha256  = "0n0aa48jliywjjc327iqpjnn11khvagvgrpz4v0d833hakbj61dq";
+      message = ''
+        In order to use NDI SDK version 5.5.0, you need to comply with
+        NewTek's license and download the appropriate Linux tarball from:
+          ${old.meta.homepage}
+        Once you have downloaded the file, please use the following command and
+        re-run the installation:
+          \$ nix-prefetch-url file://\$PWD/Install_NDI_SDK_v5_Linux.tar.gz
+      '';
+    };
+    unpackPhase = ''
+      unpackFile ${src}
+      echo y | ./Install_NDI_SDK_v5_Linux.sh
+      sourceRoot="NDI SDK for Linux";
+    '';
+  });
+
   # ocenaudio = prev.ocenaudio.overrideAttrs (old: rec {
   #   version = "3.10.6";
   #   src = prev.fetchurl {
@@ -49,37 +71,4 @@ final: prev:
   #     sha256 = "sha256-uZn9PRPlnF4Ov2jNY1KzMvi/OMPdGomkdIpA/u3JLvA=";
   #   };
   # });
-
-  ethminer = prev.ethminer.overrideAttrs (old: rec {
-    src =
-      prev.fetchFromGitHub {
-        owner = "ethereum-mining";
-        repo = "ethminer";
-        rev = "master";
-        sha256 = "1kyff3vx2r4hjpqah9qk99z6dwz7nsnbnhhl6a76mdhjmgp1q646";
-        fetchSubmodules = true;
-      };
-
-    buildInputs = [
-      prev.cli11
-      prev.boost
-      prev.opencl-headers
-      prev.mesa
-      prev.ethash
-      prev.opencl-info
-      prev.ocl-icd
-      prev.openssl
-      prev.jsoncpp
-      prev.cudatoolkit_11
-    ];
-
-    cmakeFlags = [
-      "-DHUNTER_ENABLED=OFF"
-      "-DETHASHCUDA=ON"
-      "-DAPICORE=ON"
-      "-DETHDBUS=OFF"
-      "-DCMAKE_BUILD_TYPE=Release"
-      "-DCUDA_PROPAGATE_HOST_FLAGS=off"
-    ];
-  });
 }

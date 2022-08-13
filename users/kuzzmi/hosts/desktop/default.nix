@@ -1,5 +1,9 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 let
+  pkgs = import <nixpkgs> {
+    config.allowUnfree = true;
+    overlays = [(import ../../overlays/default.nix)];
+  };
   impermanence = builtins.fetchTarball {
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
@@ -108,12 +112,15 @@ in {
         # Media
         ffmpeg
         playerctl
-        youtube-dl
+        # youtube-dl
         mpv
         vlc
 
         # Creative
         obs-studio
+	obs-studio-plugins.obs-websocket
+	# ndi
+	obs-studio-plugins.obs-ndi
         audacity
         shotcut
         lwks2022
@@ -262,7 +269,6 @@ in {
     users.kuzzmi = {
       isNormalUser = true;
       extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" "networkmanager" ];
-      shell = pkgs.zsh;
 
       # Dummy password to use on initial system loading
       initialHashedPassword = "$6$86LJPxDbacGIiX2G$HlMGeEwhFD6l4N34Mj2JzDOfl6nMOfGkH9HjdQbEfXM1ruX8eZ9r7Q/K6tB5ZK6K7a67.uhSVW8fRiMZYCH64.";

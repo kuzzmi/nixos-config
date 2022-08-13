@@ -35,11 +35,11 @@ in {
       # ];
       # transparent-clipping = false;
 
-    extraOptions = ''
-      focus-exclude = [
-        "window_type = 'dock'",
-        "window_type = 'desktop'",
-      ];
-    '';
+    # settings = ''
+    #   focus-exclude = [
+    #     "window_type = 'dock'",
+    #     "window_type = 'desktop'",
+    #   ];
+    # '';
   };
 }
