@@ -13,8 +13,9 @@ in {
     ];
 
   networking = {
-    useDHCP = false;
+    useDHCP = true;
     enableIPv6 = false;
+    networkmanager.enable = false;
     wireless = {
       enable = true;
       userControlled.enable = true;
@@ -24,7 +25,11 @@ in {
 	};
       };
     };
-    firewall.allowedTCPPorts = [ 22 5000 3000 ];
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 5001 3000 9999 5960 5961 5962 7053 7054 ];
+      allowedUDPPorts = [ 8554 ];
+    };
     interfaces = {
       enp5s0.useDHCP = true;
       wlo1.useDHCP = true;

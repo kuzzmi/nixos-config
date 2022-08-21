@@ -10,6 +10,7 @@ let
   home-manager = builtins.fetchTarball {
     url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   };
+  libndi-4 = (import ./pkgs/applications/libndi-4.nix);
   iriun = (import ./pkgs/applications/iriun/default.nix);
   lwks2022 = (import ./pkgs/applications/lightworks_2022.nix);
 in {
@@ -75,6 +76,7 @@ in {
         evince # PDF viewer
         joplin
         joplin-desktop
+        obsidian
 
         # Customizations
         feh
@@ -118,9 +120,11 @@ in {
 
         # Creative
         obs-studio
-	obs-studio-plugins.obs-websocket
-	# ndi
-	obs-studio-plugins.obs-ndi
+        obs-studio-plugins.obs-websocket
+        uxplay
+        ndi
+        # libndi-4
+        obs-studio-plugins.obs-ndi
         audacity
         shotcut
         lwks2022
@@ -184,7 +188,6 @@ in {
         layout = "us,ua";
         variant = "colemak,winkeys";
         options = [ "grp:shifts_toggle" "caps:escape" ];
-        # options = [ "grp:shifts_toggle" ];
       };
 
       persistence."/nix/persist/home/kuzzmi" = {
@@ -205,6 +208,7 @@ in {
           ".config/configstore"          # ConfigStore settings (npm package for binaries)
           # ".config/Google"               # Android Studio settings
           ".config/google-chrome"        # Google Chrome profiles
+          ".config/GIMP"                 # GIMP
           ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
           ".config/Slack"                # Slack stuff
           ".config/mpv"                  # mpv config
@@ -239,22 +243,14 @@ in {
     };
   };
 
-  systemd.services.keychron-params = {
-    enable = true;
-    description = "The command to make the Keychron K12 work correctly";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "/bin/sh -c \"echo 0 > /sys/module/hid_apple/parameters/fnmode\" && /bin/sh -c \"echo 1 > /sys/module/hid_apple/parameters/swap_opt_cmd\"";
-    };
-    wantedBy = [ "multi-user.target" ];
-  };
-
   services = {
     # Enables startx script with Xmonad.
     # NOTE: Can't be loaded as a part of the Home Manager.
-    xserver.displayManager = {
-      defaultSession = "startx+xmonad";
-      startx.enable = true;
+    xserver = {
+      displayManager = {
+        defaultSession = "startx+xmonad";
+        startx.enable = true;
+      };
     };
     usbmuxd.enable = true;
     # TODO: move this to iriun derivation
@@ -263,6 +259,18 @@ in {
       enable = true;
     };
   };
+
+  boot.extraModprobeConfig = ''
+    # Function/media keys:
+    #   0: Function keys only.
+    #   1: Media keys by default.
+    #   2: Function keys by default.
+    options hid_apple fnmode=0
+    # Fix tilde/backtick key.
+    options hid_apple iso_layout=0
+    # Swap Alt key and Command key.
+    options hid_apple swap_opt_cmd=1
+  '';
 
   users = {
     extraGroups.vboxusers.members = [ "kuzzmi" ];

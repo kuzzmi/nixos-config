@@ -43,7 +43,7 @@ in {
     '';
     history = {
       size = 10000;
-      path = ".config/zsh/history";
+      path = "/home/kuzzmi/.config/zsh/history";
     };
   };
 }
