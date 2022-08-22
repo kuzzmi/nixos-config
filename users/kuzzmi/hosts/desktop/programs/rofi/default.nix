@@ -27,10 +27,10 @@ in
       hide-scrollbar = true;
       scrollbar-width = 8;
       color-enabled = true;
-      kb-mode-next = "Tab";
-      kb-mode-previous = "Shift+Tab";
-      kb-row-up = "Up,Control+p";
-      kb-row-tab = "Control+Tab";
+      # kb-mode-next = "Tab";
+      # kb-mode-previous = "Shift+Tab";
+      # kb-row-up = "Up,Control+p";
+      # kb-row-tab = "Control+Tab";
     };
     theme = builtins.toFile "theme.rasi" (
       builtins.replaceStrings

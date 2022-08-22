@@ -122,9 +122,9 @@ in {
         obs-studio
         obs-studio-plugins.obs-websocket
         uxplay
-        ndi
+        # ndi
         # libndi-4
-        obs-studio-plugins.obs-ndi
+        # obs-studio-plugins.obs-ndi
         audacity
         shotcut
         lwks2022
@@ -195,18 +195,13 @@ in {
         directories = [
           "Projects"                     # Pet and work projects
           "Pictures"                     # Wallpapers, sketches etc
-          # "Videos"                       # Local videos
           "VirtualBox VMs"               # Virtual machines
-          # "Android"                      # To not redownload Android binaries every time
           ".arduino15"                   # To not redownload Arduino stuff
-          # ".electrum"                    # Cryptooo
           ".audacity"                    # Audacity
-          # ".config/Android Open Source Project" # Android Emulator
           ".config/Authy Desktop"        # Authy settings
           ".config/audacity"             # Audacity
           ".config/obs-studio"           # OBS studio settings/plugins
           ".config/configstore"          # ConfigStore settings (npm package for binaries)
-          # ".config/Google"               # Android Studio settings
           ".config/google-chrome"        # Google Chrome profiles
           ".config/GIMP"                 # GIMP
           ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
@@ -219,10 +214,8 @@ in {
           ".config/Postman"              # Postman settings
           ".config/nextjs-nodejs"        # NextJS settings
           ".config/rclone"               # rclone settings
-          # ".local/share/Android Open Source Project" # Android Emulator
           ".local/share/applications"    # drun shortcuts
           ".local/share/DBeaverData"     # dbeaver settings
-          # ".local/share/Google"          # Android Studio settings
           ".local/share/keyrings"        # security keyrings
           ".local/share/ranger"          # ranger stuff
           ".local/share/TelegramDesktop" # Telegram settings
@@ -235,6 +228,14 @@ in {
           # Steam
           ".local/share/Steam"
           ".factorio"
+
+          # "Videos"                                   # Local videos
+          # "Android"                                  # To not redownload Android binaries every time
+          # ".electrum"                                # Cryptooo
+          # ".config/Android Open Source Project"      # Android Emulator
+          # ".config/Google"                           # Android Studio settings
+          # ".local/share/Android Open Source Project" # Android Emulator
+          # ".local/share/Google"                      # Android Studio settings
         ];
         files = [
           ".fehbg"
@@ -260,6 +261,7 @@ in {
     };
   };
 
+  # Fixes keychron keyboard
   boot.extraModprobeConfig = ''
     # Function/media keys:
     #   0: Function keys only.

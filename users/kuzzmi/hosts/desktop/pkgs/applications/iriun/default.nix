@@ -14,6 +14,7 @@ let
       makeWrapper
       autoPatchelfHook
     ];
+
     buildInputs = [
       avahi
       alsa-lib
