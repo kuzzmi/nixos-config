@@ -98,6 +98,15 @@ in {
     mosh.enable = true;
   };
 
+  nix = {
+    gc = {
+      dates = "weekly";
+    };
+    optimise = {
+      automatic = true;
+      dates = [ "weekly" ];
+    };
+  };
 
   system.stateVersion = "21.05";
 }

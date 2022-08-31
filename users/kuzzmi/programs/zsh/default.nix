@@ -1,6 +1,7 @@
 { config, pkgs, ... } :
 let
   inherit (pkgs) stdenv;
+  nixConfigRoot = "${if stdenv.isLinux then "/etc/nixos" else "/Users/kuzzmi/.nixpkgs"}";
 in {
   programs.zsh = {
     enable = true;
@@ -15,7 +16,7 @@ in {
       le = "ledger --no-pager -f ~/Documents/Finances/ledger/ledger.dat";
       up = if stdenv.isLinux then "sudo nixos-rebuild switch" else "darwin-rebuild switch";
       nre = "sudo nvim /etc/nixos/configuration.nix";
-      nreu = "nvim ${if stdenv.isLinux then "/etc/nixos" else "/home/kuzzmi/.nixpkgs"}/users/kuzzmi/default.nix";
+      nreu = "nvim ${nixConfigRoot}/users/kuzzmi/default.nix";
       agenix = "RULES=/etc/nixos/users/kuzzmi/secrets/rules.nix agenix";
     };
     oh-my-zsh = {
@@ -43,7 +44,7 @@ in {
     '';
     history = {
       size = 10000;
-      path = "/home/kuzzmi/.config/zsh/history";
+      path = "${if stdenv.isLinux then "/home" else "/Users"}/kuzzmi/.config/zsh/history";
     };
   };
 }

@@ -1,5 +1,6 @@
 { pkgs, config, ... }:
 let
+  inherit (pkgs) stdenv;
   colors = config.customization.colors;
   fonts = config.customization.fonts;
 in
@@ -10,7 +11,7 @@ in
       font_family = "JetBrains Mono Bold";
       bold_font   = "JetBrains Mono ExtraBold";
       italic_font = "JetBrains Mono Italic";
-      font_size   = 22;
+      font_size   = if stdenv.isLinux then 22 else 20;
 
       background  = colors.primary.background;
       foreground  = colors.primary.foreground;
