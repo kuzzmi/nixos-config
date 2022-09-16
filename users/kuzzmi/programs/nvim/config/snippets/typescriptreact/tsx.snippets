@@ -2,3 +2,16 @@ snippet sc "Styled component declaration"
 	const Styled${1:Component} = styled.${2:div}(() = ({
 	  ${0}
 	}));
+
+snippet ust
+	const [${1}, set${1}] = useState(${0});
+
+snippet ucb
+	const ${1} = useCallback(() => {
+		${0}
+	}, []);
+
+snippet uef
+	useEffect(() => {
+		${0}
+	}, []);

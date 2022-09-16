@@ -92,7 +92,6 @@ in {
         youtube-dl
 
         # Commmunication
-        slack
 
         # Misc
         # transmission

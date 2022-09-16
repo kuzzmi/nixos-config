@@ -18,8 +18,8 @@
       NSGlobalDomain = {
         AppleInterfaceStyleSwitchesAutomatically = true;
 
-        InitialKeyRepeat = 1;
-        KeyRepeat = 1;
+        # InitialKeyRepeat = 1;
+        # KeyRepeat = 1;
         "com.apple.keyboard.fnState" = true;
         "com.apple.mouse.tapBehavior" = 1;
       };
