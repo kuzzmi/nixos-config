@@ -13,11 +13,11 @@ in {
       g = "git";
       tmux = "tmux -u";
       ll = "ls -l";
-      le = "ledger --no-pager -f ~/Documents/Finances/ledger/ledger.dat";
+      le = "hledger -f ~/Private/Finances/ledger.dat";
       up = if stdenv.isLinux then "sudo nixos-rebuild switch" else "darwin-rebuild switch";
-      nre = "sudo nvim /etc/nixos/configuration.nix";
+      nre = "sudo nvim ${nixConfigRoot}/common-configuration.nix";
       nreu = "nvim ${nixConfigRoot}/users/kuzzmi/default.nix";
-      agenix = "RULES=/etc/nixos/users/kuzzmi/secrets/rules.nix agenix";
+      agenix = "RULES=${nixConfigRoot}/users/kuzzmi/secrets/rules.nix agenix";
     };
     oh-my-zsh = {
       enable = true;
@@ -34,12 +34,6 @@ in {
     initExtra = ''
       export GDK_SCALE=2
       export GDK_DPI_SCALE=0.75
-      zshaddhistory() {
-        case ''${1%% *} in
-          (xvideos) return 1;;
-        esac
-        return 0;
-      }
       eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
     '';
     history = {

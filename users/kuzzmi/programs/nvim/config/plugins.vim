@@ -8,6 +8,10 @@ let g:ale_fixers = {
 \   'css': ['prettier'],
 \   'scss': ['prettier'],
 \}
+" Ledger {{{
+" =========
+let g:ledger_bin = "hledger"
+" }}}
 " Unite.vim {{{
 " =========
 

@@ -4,10 +4,10 @@ inoremap <C-s> <Esc>:r!date "+\%Y/\%m/\%d"<CR>kddA
 " autocmd BufWritePost *.dat call AutoCommit()
 nnoremap { ?^\d<CR>
 nnoremap } /^\d<CR>
-vnoremap <silent> <buffer> f :LedgerAlign<CR>
-vnoremap <silent> <buffer> s :'<,'>! ledger -f - print --sort 'date, amount'<CR>
+vnoremap <silent> <buffer> <C-f> :LedgerAlign<CR>
+vnoremap <silent> <buffer> <C-s> :'<,'>! hledger -f - print --sort 'date, amount'<CR>
 
-let g:ledger_bin = 'ledger'
+let g:ledger_bin = 'hledger'
 let g:ledger_maxwidth = 80
 let g:ledger_fillstring = '    -'
 let g:ledger_detailed_first = 1

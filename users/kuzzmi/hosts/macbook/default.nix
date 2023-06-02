@@ -4,6 +4,8 @@
     home = {
       packages = with pkgs; [
         lorri
+        # hledger
+        # hledger-ui
       ];
     };
   };

@@ -6,7 +6,7 @@ let
   };
 
   home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
+    url = "https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz";
   };
 
   inherit (pkgs) stdenv;
@@ -121,6 +121,7 @@ in {
   users = {
     users.kuzzmi = {
       shell = pkgs.zsh;
+      home = if stdenv.isLinux then "/home/kuzzmi" else "/Users/kuzzmi";
     };
   };
 }

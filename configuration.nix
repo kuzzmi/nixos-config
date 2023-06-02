@@ -22,7 +22,7 @@ in {
       networks = {
         SLAVA_UKRAYINI = {
           pskRaw = "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
-	};
+        };
       };
     };
     firewall = {

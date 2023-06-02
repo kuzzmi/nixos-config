@@ -79,6 +79,7 @@ in {
       typescript-vim
       vim-jsx-typescript
       Rename
+      (plugin "prisma/vim-prisma")
       (plugin "rking/ag.vim")
       (plugin "PeterRincker/vim-argumentative")
       (plugin "stevearc/vim-arduino")
