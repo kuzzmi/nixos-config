@@ -72,10 +72,9 @@ in {
         tor
 
         # Documents and productivity
+        cinnamon.nemo
         libreoffice
         evince # PDF viewer
-        joplin
-        joplin-desktop
         obsidian
 
         # Customizations
@@ -98,11 +97,13 @@ in {
         dconf
         xclip
         xorg.xev
-        libusb
+        libusb1
         blueman
         gparted
         cryptsetup # work with luks
         rclone     # to mount folders from pCloud
+        wmctrl
+        libinput-gestures
 
         # iOS as a webcam
         iriun
@@ -120,7 +121,7 @@ in {
 
         # Creative
         obs-studio
-        obs-studio-plugins.obs-websocket
+        # obs-studio-plugins.obs-websocket
         uxplay
         # ndi
         # libndi-4
@@ -187,60 +188,60 @@ in {
         model = "pc105";
         layout = "us,ua";
         variant = "colemak,winkeys";
-        options = [ "grp:shifts_toggle" "caps:escape" ];
+        options = [ "grp:alt_space_toggle" "caps:escape" ];
       };
 
-      persistence."/nix/persist/home/kuzzmi" = {
-        allowOther = false;
-        directories = [
-          "Projects"                     # Pet and work projects
-          "Pictures"                     # Wallpapers, sketches etc
-          "VirtualBox VMs"               # Virtual machines
-          ".arduino15"                   # To not redownload Arduino stuff
-          ".audacity"                    # Audacity
-          ".config/Authy Desktop"        # Authy settings
-          ".config/audacity"             # Audacity
-          ".config/obs-studio"           # OBS studio settings/plugins
-          ".config/configstore"          # ConfigStore settings (npm package for binaries)
-          ".config/google-chrome"        # Google Chrome profiles
-          ".config/GIMP"                 # GIMP
-          ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
-          ".config/Slack"                # Slack stuff
-          ".config/mpv"                  # mpv config
-          ".config/zsh"                  # Zsh history
-          ".config/Mailspring"           # Email
-          ".config/qt5ct"                # TODO: QT5 theming, not working
-          ".config/pulse"                # PulseAudio settings
-          ".config/Postman"              # Postman settings
-          ".config/nextjs-nodejs"        # NextJS settings
-          ".config/rclone"               # rclone settings
-          ".local/share/applications"    # drun shortcuts
-          ".local/share/DBeaverData"     # dbeaver settings
-          ".local/share/keyrings"        # security keyrings
-          ".local/share/ranger"          # ranger stuff
-          ".local/share/TelegramDesktop" # Telegram settings
-          ".local/share/vlc"             # VLC settings
-          ".local/share/direnv"          # direnv permission directory
-          ".local/data/pgsql"            # postgresql data
-          ".ssh"
-          ".ntcardvt-wrapped"            # lightworks settings
+      # persistence."/nix/persist/home/kuzzmi" = {
+      #   allowOther = false;
+      #   directories = [
+      #     "Projects"                     # Pet and work projects
+      #     "Pictures"                     # Wallpapers, sketches etc
+      #     "VirtualBox VMs"               # Virtual machines
+      #     ".arduino15"                   # To not redownload Arduino stuff
+      #     ".audacity-data"               # Audacity
+      #     ".config/audacity"             # Audacity
+      #     ".config/obs-studio"           # OBS studio settings/plugins
+      #     ".config/configstore"          # ConfigStore settings (npm package for binaries)
+      #     ".config/google-chrome"        # Google Chrome profiles
+      #     ".config/GIMP"                 # GIMP
+      #     ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
+      #     ".config/Slack"                # Slack stuff
+      #     ".config/mpv"                  # mpv config
+      #     ".config/zsh"                  # Zsh history
+      #     ".config/Mailspring"           # Email
+      #     ".config/qt5ct"                # TODO: QT5 theming, not working
+      #     ".config/pulse"                # PulseAudio settings
+      #     ".config/Postman"              # Postman settings
+      #     ".config/nextjs-nodejs"        # NextJS settings
+      #     ".config/rclone"               # rclone settings
+      #     ".local/share/applications"    # drun shortcuts
+      #     ".local/share/DBeaverData"     # dbeaver settings
+      #     ".local/share/keyrings"        # security keyrings
+      #     ".local/share/ranger"          # ranger stuff
+      #     ".local/share/TelegramDesktop" # Telegram settings
+      #     ".local/share/vlc"             # VLC settings
+      #     ".local/share/direnv"          # direnv permission directory
+      #     ".local/data/pgsql"            # postgresql data
+      #     ".ssh"
+      #     ".ntcardvt-wrapped"            # lightworks settings
 
-          # Steam
-          ".local/share/Steam"
-          ".factorio"
+      #     # Steam
+      #     ".local/share/Steam"
+      #     ".factorio"
 
-          # "Videos"                                   # Local videos
-          # "Android"                                  # To not redownload Android binaries every time
-          # ".electrum"                                # Cryptooo
-          # ".config/Android Open Source Project"      # Android Emulator
-          # ".config/Google"                           # Android Studio settings
-          # ".local/share/Android Open Source Project" # Android Emulator
-          # ".local/share/Google"                      # Android Studio settings
-        ];
-        files = [
-          ".fehbg"
-        ];
-      };
+      #     # "Videos"                                   # Local videos
+      #     # "Android"                                  # To not redownload Android binaries every time
+      #     # ".electrum"                                # Cryptooo
+      #     # ".config/Android Open Source Project"      # Android Emulator
+      #     # ".config/Google"                           # Android Studio settings
+      #     # ".local/share/Android Open Source Project" # Android Emulator
+      #     # ".local/share/Google"                      # Android Studio settings
+      #   ];
+      #   files = [
+      #     ".fehbg"
+      #     ".config/libinput-gestures.conf"
+      #   ];
+      # };
     };
   };
 
@@ -251,6 +252,22 @@ in {
       displayManager = {
         defaultSession = "startx+xmonad";
         startx.enable = true;
+      };
+      libinput = {
+        enable = true;
+        mouse.naturalScrolling = true;
+        touchpad = {
+          accelSpeed = "0.3";
+          tapping = true;
+          naturalScrolling = true;
+          additionalOptions = "
+          Option \"DisableWhileTyping\" \"True\"\n
+          Option \"AccelerationNumerator\" \"3\"\n
+          Option \"AccelerationDenominator\" \"1\"\n
+          Option \"AccelerationThreshold\" \"4\"\n
+          Option \"AdaptiveDeceleration\" \"2\"\n
+          ";
+        };
       };
     };
     usbmuxd.enable = true;
@@ -278,7 +295,7 @@ in {
     extraGroups.vboxusers.members = [ "kuzzmi" ];
     users.kuzzmi = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" "networkmanager" ];
+      extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" "networkmanager" "input" ];
 
       # Dummy password to use on initial system loading
       initialHashedPassword = "$6$86LJPxDbacGIiX2G$HlMGeEwhFD6l4N34Mj2JzDOfl6nMOfGkH9HjdQbEfXM1ruX8eZ9r7Q/K6tB5ZK6K7a67.uhSVW8fRiMZYCH64.";

@@ -89,7 +89,7 @@ in {
         direnv
 
         # Media
-        youtube-dl
+        yt-dlp
 
         # Finances
         fava

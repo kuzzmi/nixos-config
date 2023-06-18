@@ -78,7 +78,3 @@ set encoding=utf-8
 " Vim-arduino {{{
 let g:arduino_use_cli = 1
 " }}}
-"
-" NERDTree {{{
-nnoremap <leader>t :NERDTreeToggle<CR>
-" }}}

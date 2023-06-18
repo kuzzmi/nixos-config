@@ -51,7 +51,6 @@ in {
     plugins = with pkgs.vimPlugins; [
       nvim-lspconfig
       nvim-compe
-      nerdtree
       # ncm2
       # nvim-yarp
       # yats-vim
