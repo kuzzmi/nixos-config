@@ -7,7 +7,6 @@ let
     { local = "Documents"; remote = "Documents"; }
     { local = "Multimedia"; remote = "Multimedia"; }
     { local = "Private"; remote = "Private"; }
-    { local = "Notes"; remote = "Notes"; }
     # { local = "Public"; remote = "Public"; }
     # { local = "Containers"; remote = "ContainerData"; }
   ];

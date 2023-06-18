@@ -47,9 +47,7 @@ import XMonad.Util.NamedScratchpad ( namedScratchpadManageHook
 import XMonad.Util.NamedWindows
 import XMonad.Util.WorkspaceCompare
 
-import XMonad.Layout.Accordion
 import XMonad.Layout.BoringWindows
-import XMonad.Layout.Combo
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
 import XMonad.Layout.Grid
@@ -64,8 +62,7 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing
 import XMonad.Layout.SubLayouts as SL
 import XMonad.Layout.Tabbed
-import XMonad.Layout.TwoPane
-import XMonad.Layout.WindowNavigation (windowNavigation, Navigate(Move, Go))
+import XMonad.Layout.WindowNavigation (windowNavigation)
 
 import XMonad.Prompt
 import XMonad.Prompt.FuzzyMatch
@@ -187,6 +184,20 @@ projects =
             , projectStartHook = Nothing
             }
 
+  , Project { projectName      = wsBUL
+            , projectDirectory = "~/Projects/bulleted.app"
+            , projectStartHook = Just $ do spawnOn wsBUL myTerminal
+                                           spawnOn wsBUL myTerminal
+                                           spawnOn wsBUL myTerminal
+            }
+
+  , Project { projectName      = wsFIN
+            , projectDirectory = "~/Documents/Finances/ledger"
+            , projectStartHook = Just $ do spawnOn wsFIN "kitty -e $SHELL -c 'cal -s3 && $SHELL'"
+                                           spawnOn wsFIN "kitty -e make watch"
+                                           spawnOn wsFIN "kitty -e vim ledger.dat"
+            }
+
   , Project { projectName      = wsFND
             , projectDirectory = "~/Projects/fundof"
             , projectStartHook = Just $ do spawnAndDo (doShift wsFND) "slack"
@@ -203,7 +214,15 @@ projects =
 
   , Project { projectName      = wsPOD
             , projectDirectory = "~/"
-            , projectStartHook = Just $ do spawnOn wsPOD "audacity"
+            , projectStartHook = Just $ do spawnOn wsPOD "ocenaudio"
+                                           spawnOn wsPOD "audacity"
+            }
+
+  , Project { projectName      = wsDUS
+            , projectDirectory = "~/Projects/dushnila"
+            , projectStartHook = Just $ do spawnOn wsDUS myTerminal
+                                           spawnOn wsDUS myTerminal
+                                           spawnOn wsDUS myTerminal
             }
 
   , Project { projectName      = wsGAM
@@ -292,11 +311,13 @@ myLayout =
     windowNavigation $
     boringWindows $
     smartBorders $
-    -- onWorkspace wsFND (avoidStruts $ myGaps $ centerMaster Grid) $
-    onWorkspace wsFND (workGrid) $
     onWorkspace wsGAM (noBorders $ tiled ||| tabs) $
+    onWorkspace wsFIN fin .
     full $
     tiled ||| tabs
+    -- onWorkspace wsFIN (tiled ||| tabs) .
+    -- onWorkspace wsBRW (tiled ||| tabs) .
+    -- tiled ||| tabs ||| workGrid
     where
         myGaps = spacingWithEdge gap
 
@@ -306,16 +327,17 @@ myLayout =
         ratio   = 2 / 3
         delta   = 1 / 15
 
-        -- workLayout = named "Work"
-        --     $ avoidStruts
-        --     $ myGaps
-        --     $ (centerMaster Grid)
-
         tiled = named "Tiled"
             $ avoidStruts
             $ subLayout [] (noGapsTabs)
             $ myGaps
             $ Tall nmaster delta ratio
+
+        fin = named "Finances"
+            $ avoidStruts
+            $ subLayout [] (noGapsTabs)
+            $ myGaps
+            $ ResizableTall nmaster delta ratio [1, 2/5]
 
         -- Doesn't work :(
         -- FIXME: focus starts jumping between tabs and right layout
@@ -332,13 +354,9 @@ myLayout =
         --   --------------------
         workGrid = named "Work grid"
           $ avoidStruts
+          $ myGaps
           $ (layoutN 2 (relBox (3/4) 0 1     1) (Just $ relBox 0 0 1 1) $ Tall 2 0.1 0.5)
           $ (layoutAll (relBox 0     0 (3/4) 1)                           noGapsTabs)
-          -- $ combineTwo (TwoPane 0.03 0.5) (myGaps $ Accordion) (myGaps $ Accordion)
-
-          -- $ layoutN 1 (relBox 0 0 (3/4) 1) (Just $ relBox 0 0 1 1) Full
-          -- $ layoutAll (relBox (3/4) 0 1 1) noGapsTabs
-
         --
         --         Cool grid
         --   --------------------
@@ -396,14 +414,13 @@ myKeys =
     [ -----------
       -- Programs
       ((myMask,               xK_F2),     spawn myBrowser)
-    , ((myMask .|. shiftMask, xK_F2),     spawn $ myBrowser ++ " --profile-directory=\"Profile 4\"")
     , ((myMask,               xK_Return), safeSpawn myTerminal [])
     , ((myMask .|. shiftMask, xK_m),      safeSpawn "pavucontrol" [])
     , ((myMask,               xK_F12),    safeSpawn "kitty" ["-e", "bashmount"])
 
       -----------
       -- Rofi stuff
-    , ((myMask, xK_Escape), spawn "rofi -show combi")
+    , ((myMask, xK_r), spawn "rofi -show combi")
     , ((myMask, xK_e), spawn "rofi -show emoji")
     , ((myMask, xK_c), spawn "rofi -show calc -modi calc -no-show-match -no-sort")
 
@@ -452,9 +469,9 @@ myKeys =
     , ((myMask,               xK_n), switchProjectPrompt myPromptTheme)
     , ((myMask .|. shiftMask, xK_n), shiftToProjectPrompt myPromptTheme)
 
-    -- Navigate between windows in a group'
-    , ((myMask,               xK_quoteright), windows W.focusDown)
-    , ((myMask,               xK_o),          windows W.focusUp)
+    -- Navigate between windows in a group
+    , ((myMask,               xK_quoteright), onGroup W.focusDown')
+    , ((myMask,               xK_o),          onGroup W.focusUp')
     -- Merge windows in a group
     --   push the current group into the next group
     , ((myMask,               xK_End),       sendMessage $ pushGroup D)
@@ -465,18 +482,6 @@ myKeys =
     , ((myMask,               xK_Home),      do withFocused mergeToMaster
                                                 windows W.focusDown)
     , ((myMask,               xK_u),         withFocused (sendMessage . UnMerge))
-
-    , ((myMask,                 xK_h), sendMessage $ Go L)
-    , ((myMask,                 xK_l), sendMessage $ Go R)
-    , ((myMask,                 xK_j), sendMessage $ Go D)
-    , ((myMask,                 xK_k), sendMessage $ Go U)
-    , ((myMask .|. controlMask, xK_h), sendMessage Shrink)
-    , ((myMask .|. controlMask, xK_l), sendMessage Expand)
-
-    , ((myMask .|. shiftMask,   xK_h), sendMessage $ Move L)
-    , ((myMask .|. shiftMask,   xK_l), sendMessage $ Move R)
-    , ((myMask .|. shiftMask,   xK_j), sendMessage $ Move D)
-    , ((myMask .|. shiftMask,   xK_k), sendMessage $ Move U)
     ]
     where
     toggleTag name = withFocused $ \w ->

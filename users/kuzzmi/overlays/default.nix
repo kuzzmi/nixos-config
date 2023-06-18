@@ -18,20 +18,20 @@ final: prev:
     };
   });
 
-  # youtube-dl = prev.youtube-dl.overrideAttrs (old: rec {
-  #   patches = [
-  #     (prev.fetchpatch {
-  #       name = "fix-youtube-dl-speed.patch";
-  #       url = "https://github.com/ytdl-org/youtube-dl/compare/57044eacebc6f2f3cd83c345e1b6e659a22e4773...1e677567cd083d43f55daef0cc74e5fa24575ae3.diff";
-  #       sha256 = "11s0j3w60r75xx20p0x2j3yc4d3yvz99r0572si8b5qd93lqs4pr";
-  #     })
-  #     (prev.fetchpatch {
-  #       name = "fix-youtube-player.patch";
-  #       url = "https://github.com/ytdl-org/youtube-dl/compare/1e677567cd083d43f55daef0cc74e5fa24575ae3...a0068bd6bec16008bda7a39caecccbf84881c603.diff";
-  #       sha256 = "R7yXAH7PzDTWAKm4GG5JZrIkAb6lrRjF968EIeATc2g=";
-  #     })
-  #   ];
-  # });
+  youtube-dl = prev.youtube-dl.overrideAttrs (old: rec {
+    patches = [
+      (prev.fetchpatch {
+        name = "fix-youtube-dl-speed.patch";
+        url = "https://github.com/ytdl-org/youtube-dl/compare/57044eacebc6f2f3cd83c345e1b6e659a22e4773...1e677567cd083d43f55daef0cc74e5fa24575ae3.diff";
+        sha256 = "11s0j3w60r75xx20p0x2j3yc4d3yvz99r0572si8b5qd93lqs4pr";
+      })
+      (prev.fetchpatch {
+        name = "fix-youtube-player.patch";
+        url = "https://github.com/ytdl-org/youtube-dl/compare/1e677567cd083d43f55daef0cc74e5fa24575ae3...a0068bd6bec16008bda7a39caecccbf84881c603.diff";
+        sha256 = "R7yXAH7PzDTWAKm4GG5JZrIkAb6lrRjF968EIeATc2g=";
+      })
+    ];
+  });
 
   # ndi = prev.ndi.overrideAttrs (old: rec {
   #   fullVersion = "5.5.0";

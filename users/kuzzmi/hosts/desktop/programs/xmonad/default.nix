@@ -73,7 +73,6 @@ in
       XCURSOR_THEME="Qogir"
       xset r rate 210 40
       $HOME/.fehbg
-      libinput-gestures
 
       exec xmonad
     '';
