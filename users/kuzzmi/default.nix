@@ -6,7 +6,7 @@ let
   };
 
   home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/release-22.11.tar.gz";
+    url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
   };
 
   inherit (pkgs) stdenv;
@@ -78,7 +78,7 @@ in {
     };
 
     home = {
-      stateVersion = "22.11";
+      stateVersion = "23.05";
 
       username = "kuzzmi";
 
@@ -90,6 +90,9 @@ in {
 
         # Media
         youtube-dl
+
+        # Finances
+        fava
 
         # Commmunication
 
