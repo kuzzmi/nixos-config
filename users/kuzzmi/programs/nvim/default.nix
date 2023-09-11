@@ -44,6 +44,7 @@ in {
     ];
     extraPackages = with pkgs; [
       silver-searcher
+      arduino-cli
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];
@@ -79,6 +80,7 @@ in {
       typescript-vim
       vim-jsx-typescript
       Rename
+      dressing-nvim
       (plugin "prisma/vim-prisma")
       (plugin "rking/ag.vim")
       (plugin "PeterRincker/vim-argumentative")
