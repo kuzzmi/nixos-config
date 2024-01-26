@@ -86,6 +86,8 @@ in {
       (plugin "rking/ag.vim")
       (plugin "PeterRincker/vim-argumentative")
       (plugin "stevearc/vim-arduino")
+      # Local LLM integration
+      (plugin "David-Kunz/gen.nvim")
     ];
   };
 }
