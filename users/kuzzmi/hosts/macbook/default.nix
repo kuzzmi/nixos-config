@@ -4,6 +4,7 @@
     home = {
       packages = with pkgs; [
         lorri
+        micromamba
         # hledger
         # hledger-ui
       ];

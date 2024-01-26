@@ -87,12 +87,15 @@ in {
         fzf
         p7zip
         direnv
+        silver-searcher
 
         # Media
-        youtube-dl
+        ffmpeg
+        yt-dlp
 
         # Finances
         fava
+        hledger
 
         # Commmunication
 

@@ -45,6 +45,7 @@ in {
     extraPackages = with pkgs; [
       silver-searcher
       arduino-cli
+      arduino-language-server
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];

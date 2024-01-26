@@ -1,5 +1,5 @@
-nnoremap <C-s> :r!date "+\%Y/\%m/\%d"<CR>A
-inoremap <C-s> <Esc>:r!date "+\%Y/\%m/\%d"<CR>kddA
+nnoremap <C-s> :r!date "+\%Y-\%m-\%d"<CR>A
+inoremap <C-s> <Esc>:r!date "+\%Y-\%m-\%d"<CR>kddA
 " autocmd BufWritePre *.dat execute "mark i" | execute "%LedgerAlign" | execute "normal 'i"
 " autocmd BufWritePost *.dat call AutoCommit()
 nnoremap { ?^\d<CR>

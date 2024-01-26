@@ -6,11 +6,11 @@ let g:ale_fixers = {
 \   'javascriptreact': ['prettier'],
 \   'typescriptreact': ['prettier'],
 \   'css': ['prettier'],
-\   'scss': ['prettier'],
+\   'scss': ['prettier']
 \}
 " Ledger {{{
 " =========
-let g:ledger_bin = "hledger"
+" let g:ledger_bin = "ledger"
 " }}}
 " Unite.vim {{{
 " =========
