@@ -11,9 +11,10 @@ in {
       tmx = "tmuxinator";
       tmxf = "tmuxinator start fin -p ~/.config/tmuxinator/fin.yml";
       g = "git";
+      gcob = "git checkout $(git branch | fzf)";
       tmux = "tmux -u";
       ll = "ls -l";
-      le = "hledger -f ~/Private/Finances/ledger.dat";
+      le = "hledger -f ~/Private/Finances/hledger/hledger.journal";
       up = if stdenv.isLinux then "sudo nixos-rebuild switch" else "darwin-rebuild switch";
       nre = "sudo nvim ${nixConfigRoot}/common-configuration.nix";
       nreu = "nvim ${nixConfigRoot}/users/kuzzmi/default.nix";
@@ -30,11 +31,13 @@ in {
       COMPLETION_WAITING_DOTS="true"
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=11"
       export EDITOR='nvim'
+      zstyle ':omz:alpha:lib:git' async-prompt no
     '';
     initExtra = ''
       export GDK_SCALE=2
       export GDK_DPI_SCALE=0.75
       eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
+      export PATH=$PATH:/Users/kuzzmi/Library/Python/3.9/bin
     '';
     history = {
       size = 10000;

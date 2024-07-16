@@ -7,6 +7,13 @@ in
 {
   programs.kitty = {
     enable = true;
+    keybindings = {
+      "ctrl+shift+enter" = "";
+      "cmd+enter" = "new_window_with_cwd";
+      "cmd+t" = "launch --cwd=current --type=tab --location=neighbor";
+      "cmd+shift+enter" = "new_window";
+      "cmd+shift+t" = "launch --type=tab --location=neighbor";
+    };
     settings = {
       font_family = "JetBrains Mono Bold";
       bold_font   = "JetBrains Mono ExtraBold";

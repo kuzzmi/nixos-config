@@ -6,7 +6,8 @@ let
   };
 
   home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
+    # url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
+    url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   };
 
   inherit (pkgs) stdenv;
@@ -40,29 +41,56 @@ in {
       enable = true;
       colors = {
         primary = {
-          background = "#1d1f21";
-          foreground = "#c5c8c6";
+          background = "#282c34";  ## A deep, dark grey, offering a modern, sleek look
+          foreground = "#abb2bf";  ## A soft, light grey, for clear legibility and contrast
         };
+
         normal = {
-          black   = "#1d1f21";
-          red     = "#cc6666";
-          green   = "#b5bd68";
-          yellow  = "#f0c674";
-          blue    = "#81a2be";
-          magenta = "#b294bb";
-          cyan    = "#8abeb7";
-          white   = "#c5c8c6";
+          black   = "#282c34";  ## Matches the primary background for a cohesive look
+          red     = "#e06c75";  ## A vibrant, warm red for attention-grabbing elements
+          green   = "#98c379";  ## A fresh, lively green for success states and progress
+          yellow  = "#e5c07b";  ## A warm, inviting yellow for warnings and highlights
+          blue    = "#61afef";  ## A bright, calming blue for links and information
+          magenta = "#c678dd";  ## A soft, playful magenta for creative elements
+          cyan    = "#56b6c2";  ## A crisp, refreshing cyan for notifications and accents
+          white   = "#abb2bf";  ## Matches the primary foreground for consistent readability
         };
+
         bright = {
-          black   = "#969896";
-          red     = "#cc6666";
-          green   = "#b5bd68";
-          yellow  = "#f0c674";
-          blue    = "#81a2be";
-          magenta = "#b294bb";
-          cyan    = "#8abeb7";
-          white   = "#c5c8c6";
+          black   = "#5c6370";  ## A lighter grey for subdued text and secondary elements
+          red     = "#e06c75";  ## Same as normal red, maintains vibrancy in bright context
+          green   = "#98c379";  ## Same as normal green, keeps its freshness in bright areas
+          yellow  = "#e5c07b";  ## Same as normal yellow, remains warm and inviting
+          blue    = "#61afef";  ## Same as normal blue, keeps its clarity and calmness
+          magenta = "#c678dd";  ## Same as normal magenta, retains its playful spirit
+          cyan    = "#56b6c2";  ## Same as normal cyan, stays crisp and refreshing
+          white   = "#ffffff";  ## A pure white for maximum contrast and highlight
         };
+
+        # primary = {
+        #   background = "#1d1f21";
+        #   foreground = "#c5c8c6";
+        # };
+        # normal = {
+        #   black   = "#1d1f21";
+        #   red     = "#cc6666";
+        #   green   = "#b5bd68";
+        #   yellow  = "#f0c674";
+        #   blue    = "#81a2be";
+        #   magenta = "#b294bb";
+        #   cyan    = "#8abeb7";
+        #   white   = "#c5c8c6";
+        # };
+        # bright = {
+        #   black   = "#969896";
+        #   red     = "#cc6666";
+        #   green   = "#b5bd68";
+        #   yellow  = "#f0c674";
+        #   blue    = "#81a2be";
+        #   magenta = "#b294bb";
+        #   cyan    = "#8abeb7";
+        #   white   = "#c5c8c6";
+        # };
       };
       fonts = {
         sans = {

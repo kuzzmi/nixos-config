@@ -3,43 +3,37 @@ snippet t
 	    ${2:account}    ${3:value}
 	    ${0:account}
 
-snippet aga
-	Expenses:Cars:Audi:Gas  UAH ${1:value}
+snippet gas
+	Expenses:Cars:Gas  UAH ${1:value}
 
 snippet gro
 	Expenses:Groceries  UAH ${1:value}
 
 snippet lar
-	Expenses:Home:Maid  UAH ${1:value}.00
+	Expenses:Services  UAH ${1:value}.00
 
 snippet su "Support"
 	`strftime("%Y/%m/%d")` * Support
-		Expenses:Support:Wife  USD ${1:value}.00
+		Expenses:Donation-And-Support:Wife  USD ${1:value}.00
 		${0:Assets:Cash:Envelope}
 
-snippet f
-	Assets:Cash:Envelopes:${0:Fund}
+# snippet f
+# 	Assets:Cash:Envelopes:${0:Fund}
 
 snippet doc
 	Expenses:Health:Doctor  UAH ${1:value}
 
-snippet wi
-	Assets:Cash:Wife
+snippet sal
+	Income:Salary
 
-snippet wa
-	Assets:Cash:Wallet
-
-snippet mo
-	Assets:Banking:Monobank:Black
+snippet id
+	Income:Dushnila
 
 snippet mb
-	Assets:Banking:Monobank:Banka
+	Assets:Liquidity:Monobank:Black
 
-snippet eed
-	Expenses:Entertainment:Dining  UAH ${1:value}
+snippet mw
+	Assets:Liquidity:Monobank:White
 
-snippet uc
-	Assets:Banking:UBS:Checking
-
-snippet up
-	Assets:Banking:UBS:Prepaid
+snippet eas
+	Expenses:Entertainment-And-Shopping  UAH ${1:value}

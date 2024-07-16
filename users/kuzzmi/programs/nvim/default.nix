@@ -46,6 +46,7 @@ in {
       silver-searcher
       arduino-cli
       arduino-language-server
+      gopls
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];
@@ -76,12 +77,15 @@ in {
       vim-snippets
       vim-javascript
       auto-pairs
+      (plugin "cxw42/change-case.vim")
       # vim-es6
       vim-closetag
       typescript-vim
       vim-jsx-typescript
       Rename
       dressing-nvim
+      zen-mode-nvim
+      (plugin "folke/trouble.nvim")
       (plugin "prisma/vim-prisma")
       (plugin "rking/ag.vim")
       (plugin "PeterRincker/vim-argumentative")

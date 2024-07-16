@@ -25,7 +25,8 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>n', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float({"line"})<CR>', opts)
+  buf_set_keymap('n', '<space>E', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
@@ -35,7 +36,7 @@ end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { "tsserver" }
+local servers = { "tsserver", "gopls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -82,12 +83,13 @@ require'gen'.setup {
   -- model = "mistral", -- The default model to use.
   -- model = "dolphin-mixtral:8x7b-v2.7-q2_K", -- The default model to use.
   -- model = "dolphin", -- The default model to use.
+  -- model = "dolphin-mixtral", -- The default model to use.
   model = "codellama:7b", -- The default model to use.
-  display_mode = "split", -- The display mode. Can be "float" or "split".
-  auto_close_after_replace = true,
+  display_mode = "float", -- The display mode. Can be "float" or "split".
+  auto_close_after_replace = false,
   show_prompt = false, -- Shows the Prompt submitted to Ollama.
   show_model = false, -- Displays which model you are using at the beginning of your chat session.
-  no_auto_close = false, -- Never closes the window automatically.
+  no_auto_close = true, -- Never closes the window automatically.
   -- init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
   -- Function to initialize Ollama
   command = "curl --silent --no-buffer -X POST http://192.168.88.12:11434/api/generate -d $body",
@@ -99,14 +101,27 @@ require'gen'.setup {
   debug = false -- Prints errors and the command which is run.-- same as above
 }
 
-require('gen').prompts['Fix_Code'] = {
-  prompt = "Fix the following code. Only ouput the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
-  replace = true,
-  extract = "```$filetype\n(.-)```"
+require('gen').prompts = {
+  Generate = { prompt = "$input", replace = true },
+  Ask_Code = {
+    prompt = "$input \n Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+  }
 }
 
-require('gen').prompts['Comment_Code'] = {
-  prompt = "Add a short comment for this code. Comment should be extremely precise and useful. Only ouput the result with the original code in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
-  replace = true,
-  extract = "```$filetype\n(.-)```"
-}
+-- ['Fix_Code'] = {
+--   prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+--   replace = true,
+--   extract = "```$filetype\n(.-)```"
+-- }
+--
+-- require('gen').prompts['Comment_Code'] = {
+--   prompt = "Add a short comment for this code. Comment should be extremely precise and useful. Only ouput the result with the original code in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+--   replace = true,
+--   extract = "```$filetype\n(.-)```"
+-- }
+
+local function ToggleZenMode()
+  require("zen-mode").toggle({ window = { width = 85 }})
+end
+
+vim.keymap.set('n', '<space>z', ToggleZenMode)
