@@ -274,6 +274,8 @@ in {
     options hid_apple swap_opt_cmd=1
   '';
 
+  fonts.fontDir.enable = true;
+
   users = {
     extraGroups.vboxusers.members = [ "kuzzmi" ];
     users.kuzzmi = {
