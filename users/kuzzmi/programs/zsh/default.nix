@@ -18,6 +18,7 @@ in {
       up = if stdenv.isLinux then "sudo nixos-rebuild switch" else "darwin-rebuild switch";
       nre = "sudo nvim ${nixConfigRoot}/common-configuration.nix";
       nreu = "nvim ${nixConfigRoot}/users/kuzzmi/default.nix";
+      edit-nvim = "nvim ${nixConfigRoot}/users/kuzzmi/programs/nvim/default.nix";
       agenix = "RULES=${nixConfigRoot}/users/kuzzmi/secrets/rules.nix agenix";
     };
     oh-my-zsh = {

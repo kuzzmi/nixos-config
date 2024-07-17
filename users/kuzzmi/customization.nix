@@ -6,7 +6,7 @@ let
 in
 {
   options.customization = {
-    enable = mkEnableOption "Enable desktop environment";
+    enable = mkEnableOption "Enable color customization";
     theme = {
       name = mkOption {
         type = types.str;

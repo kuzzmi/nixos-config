@@ -5,8 +5,12 @@ let
     overlays = [(import ./overlays/default.nix)];
   };
 
+  nixvim = import (builtins.fetchGit {
+    url = "https://github.com/nix-community/nixvim";
+    # You can use `ref = "nixos-<version>"` to set it here
+  });
+
   home-manager = builtins.fetchTarball {
-    # url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
     url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   };
 
@@ -24,6 +28,7 @@ in {
 
   home-manager.users.kuzzmi = { ... }: {
     imports = [
+      # nixvim.homeManagerModules.nixvim
       ./customization.nix
 
       # platform agnostic

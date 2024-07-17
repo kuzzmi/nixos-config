@@ -11,6 +11,12 @@
     };
   };
 
+  fonts.packages = [
+    pkgs.rubik
+    pkgs.jetbrains-mono
+    pkgs.nerdfonts
+  ];
+
   # System-related settings that I would consider a user-preference
   system = {
     # Keyboard

@@ -35,63 +35,68 @@ in {
     extraConfig = builtins.concatStringsSep "\n" [
       (lib.strings.fileContents ./config/base.vim)
       (lib.strings.fileContents ./config/plugins.vim)
-
-      ''
-        lua << EOF
-          ${lib.strings.fileContents ./config/lsp.lua}
-        EOF
-      ''
     ];
+
+    extraLuaConfig = builtins.concatStringsSep "\n" [
+      (lib.strings.fileContents ./config/base.lua)
+      (lib.strings.fileContents ./config/lsp.lua)
+      (lib.strings.fileContents ./config/plugins.lua)
+    ];
+
     extraPackages = with pkgs; [
       silver-searcher
-      arduino-cli
-      arduino-language-server
+      # arduino-cli
+      # arduino-language-server
       gopls
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];
     plugins = with pkgs.vimPlugins; [
+      # LSP, completion and diagnostics
       nvim-lspconfig
       nvim-compe
-      # ncm2
-      # nvim-yarp
-      # yats-vim
-      vim-ledger
-      fzf-vim
-      vim-nix
+      ale
+      (plugin "folke/trouble.nvim")
+
+      # Formatting
       vim-easy-align
-      vim-startify
+      vim-surround
+      vim-repeat
+      auto-pairs
+      vim-closetag
+      Rename
       tcomment_vim
+      (plugin "cxw42/change-case.vim")
+      (plugin "PeterRincker/vim-argumentative")
+
+      # Navigation
+      fzf-vim
+      (plugin "kelly-lin/telescope-ag")
+
+      # File specific plugins
+      typescript-vim
+      vim-jsx-typescript
+      vim-javascript
+      vim-ledger
+      (plugin "prisma/vim-prisma")
+      # (plugin "stevearc/vim-arduino")
+
+      # Misc
+      vim-startify # lovely cow
+      zen-mode-nvim
+      vim-snipmate
+      vim-snippets
+
       vim-abolish
       vim-fugitive
       tlib_vim
-      ale
-      unite-vim
-      neomru-vim
-      # vim-addon-mw-utils
-      vim-airline
-      vim-airline-themes
-      vim-surround
-      vim-repeat
-      vim-snipmate
-      vim-snippets
-      vim-javascript
-      auto-pairs
-      (plugin "cxw42/change-case.vim")
-      # vim-es6
-      vim-closetag
-      typescript-vim
-      vim-jsx-typescript
-      Rename
       dressing-nvim
-      zen-mode-nvim
-      (plugin "folke/trouble.nvim")
-      (plugin "prisma/vim-prisma")
-      (plugin "rking/ag.vim")
-      (plugin "PeterRincker/vim-argumentative")
-      (plugin "stevearc/vim-arduino")
-      # Local LLM integration
-      (plugin "David-Kunz/gen.nvim")
+      (plugin "nvim-lualine/lualine.nvim")
+      (plugin "nvim-tree/nvim-web-devicons")
+      (plugin "David-Kunz/gen.nvim") # Local LLM integration
+
+      (plugin "nvim-lua/plenary.nvim")
+      (plugin "nvim-telescope/telescope.nvim")
     ];
   };
 }

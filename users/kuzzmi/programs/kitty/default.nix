@@ -15,7 +15,7 @@ in
       "cmd+shift+t" = "launch --type=tab --location=neighbor";
     };
     settings = {
-      font_family = "JetBrains Mono Bold";
+      font_family = "JetBrains Mono";
       bold_font   = "JetBrains Mono ExtraBold";
       italic_font = "JetBrains Mono Italic";
       font_size   = if stdenv.isLinux then 22 else 20;
@@ -40,6 +40,8 @@ in
       color15     = colors.normal.white;
 
       window_padding_width = "2 5";
+
+      term = "xterm-256color";
     };
   };
 }
