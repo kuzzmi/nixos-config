@@ -6,7 +6,7 @@ let
 in {
   services.picom = {
     enable = true;
-    package = nur.repos.reedrw.picom-next-ibhagwan;
+    # package = nur.repos.reedrw.picom-next-ibhagwan;
     # backend = "xrender";
     backend = "glx";
     # vSync = true;

@@ -17,7 +17,7 @@ in {
     enableIPv6 = false;
     networkmanager.enable = false;
     wireless = {
-      enable = true;
+      enable = false; # true;
       userControlled.enable = true;
       networks = {
         SLAVA_UKRAYINI = {
@@ -27,7 +27,9 @@ in {
     };
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 22 5001 3000 9999 5960 5961 5962 7053 7054 ];
+      allowedTCPPorts = [
+        22 5001 3000 9999 5960 5961 5962 7053 7054 11223 5201
+      ];
       allowedUDPPorts = [ 8554 ];
     };
     interfaces = {
@@ -37,7 +39,10 @@ in {
   };
 
   virtualisation = {
-    docker.enable = true;
+    docker = {
+      enable = true;
+      enableNvidia = true;
+    };
     virtualbox.host = {
       enable = false;
       enableExtensionPack = true;
@@ -54,16 +59,20 @@ in {
     keyMap = "colemak";
   };
 
-  sound.enable = true;
+  # sound.enable = true;
   hardware = {
     pulseaudio.enable = true;
-    openrazer.enable = true;
-    bluetooth.enable = true;
+  #   # openrazer.enable = true;
+  #   # bluetooth.enable = true;
   };
 
   users.mutableUsers = false;
 
   services = {
+    # pipewire = {
+    #   enable = true;
+    #   pulse.enable = true;
+    # };
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
@@ -71,11 +80,20 @@ in {
             Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
 	    Option         "TripleBuffer" "on"
       '';
+      libinput = {
+        enable = true;
+
+        # disabling mouse acceleration
+        mouse = {
+          accelProfile = "flat";
+        };
+      };
     };
     dbus.packages = with pkgs; [ dconf ];
     gnome.gnome-keyring.enable = true;
     openssh = {
       enable = true;
+      settings.X11Forwarding = true;
     };
   };
 
@@ -84,6 +102,7 @@ in {
       directories = [
         "/var/log"
         "/var/lib/docker"
+        "/var/lib/plex"
         "/var/db/sudo"
         "/etc/nixos"
       ];
@@ -91,10 +110,24 @@ in {
         "/etc/machine-id"
       ];
     };
+    etc = {
+      "ssh/ssh_host_rsa_key".source =
+        "/nix/persist/etc/ssh/ssh_host_rsa_key";
+      "ssh/ssh_host_rsa_key.pub".source =
+        "/nix/persist/etc/ssh/ssh_host_rsa_key.pub";
+      "ssh/ssh_host_ed25519_key".source =
+        "/nix/persist/etc/ssh/ssh_host_ed25519_key";
+      "ssh/ssh_host_ed25519_key.pub".source =
+        "/nix/persist/etc/ssh/ssh_host_ed25519_key.pub";
+    };
   };
 
   programs = {
-    steam.enable = true;
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
+    };
     mosh.enable = true;
   };
 

@@ -103,34 +103,15 @@ in {
 
         # Finances
         hledger
-
-        # Commmunication
-
-        # Misc
-        # transmission
-
-        # Fonts
-        # jetbrains-mono
-        # font-awesome
-        # material-design-icons
-        # rubik
-        # roboto
-        # paratype-pt-sans
-
-        # # Dev
-        # iperf
-        # nmap
-        # gh
-        # gnumake
-        # dbeaver
-        # google-cloud-sdk
-        # # android-studio
-        # # docker-compose
-        # postman
       ];
     };
   };
 
+  fonts.fontDir.enable = true;
+
+  programs.zsh.enable = true;
+
+>>>>>>> multi-host-refactoring
   users = {
     users.kuzzmi = {
       shell = pkgs.zsh;
