@@ -107,8 +107,6 @@ in {
     };
   };
 
-  fonts.fontDir.enable = true;
-
   programs.zsh.enable = true;
 
   users = {
