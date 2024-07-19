@@ -111,7 +111,6 @@ in {
 
   programs.zsh.enable = true;
 
->>>>>>> multi-host-refactoring
   users = {
     users.kuzzmi = {
       shell = pkgs.zsh;
