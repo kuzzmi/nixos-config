@@ -7,15 +7,9 @@ let
   impermanence = builtins.fetchTarball {
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
-  home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-  };
-  libndi-4 = (import ./pkgs/applications/libndi-4.nix);
-  iriun = (import ./pkgs/applications/iriun/default.nix);
   lwks2022 = (import ./pkgs/applications/lightworks_2022.nix);
 in {
   imports = [
-    "${home-manager}/nixos"
     ./nas-mounts.nix
   ];
 
@@ -28,12 +22,12 @@ in {
     imports = [
       "${impermanence}/home-manager.nix"
 
-      ./services/picom/default.nix
+      # ./services/picom/default.nix
 
-      ./programs/xmonad/default.nix
-      ./programs/rofi/default.nix
-      ./programs/polybar/default.nix
-      ./programs/dunst/default.nix
+      # ./programs/xmonad/default.nix
+      # ./programs/rofi/default.nix
+      # ./programs/polybar/default.nix
+      # ./programs/dunst/default.nix
     ];
 
     customization = {
@@ -67,120 +61,123 @@ in {
 
     home = {
       packages = with pkgs; [
-        # Browsers
-        google-chrome
-        tor
+       #  # Browsers
+       #  google-chrome
+       #  tor
 
-        # Documents and productivity
-        libreoffice
-        evince # PDF viewer
-        joplin
-        joplin-desktop
-        obsidian
+       #  # Documents and productivity
+       #  libreoffice
+       #  evince # PDF viewer
+       #  joplin
+       #  joplin-desktop
+       #  # obsidian
 
-        # Customizations
-        feh
-        libnotify
-        qt5ct
+       #  # Customizations
+       #  feh
+       #  libnotify
+       #  qt5ct
 
-        # Utilities
-        fzf
-        pavucontrol
-        unzip
-        p7zip
-        entr    # monitor changes
-        direnv  # directory-specific envs
-        xbindkeys
-        xdotool
-        yq
-        udisks
-        bashmount
-        dconf
-        xclip
-        xorg.xev
-        libusb
-        blueman
-        gparted
-        cryptsetup # work with luks
-        rclone     # to mount folders from pCloud
+       #  # Utilities
+       #  fzf
+       #  pavucontrol
+       #  unzip
+       #  p7zip
+       #  entr    # monitor changes
+       #  direnv  # directory-specific envs
+       #  xbindkeys
+       #  xdotool
+       #  yq
+       #  udisks
+       #  bashmount
+       #  dconf
+       #  xclip
+       #  xorg.xev
+       #  libusb
+       #  blueman
+       #  gparted
+       #  cryptsetup # work with luks
+       #  rclone     # to mount folders from pCloud
 
-        # iOS as a webcam
-        iriun
+       #  # iOS as a webcam
+       #  # iriun
 
-        # To talk to iPhone
-        libimobiledevice
-        ifuse
+       #  # To talk to iPhone
+       #  libimobiledevice
+       #  ifuse
 
-        # Media
-        ffmpeg
-        playerctl
-        # youtube-dl
-        mpv
-        vlc
+       #  # Media
+       #  ffmpeg
+       #  playerctl
+       #  # youtube-dl
+       #  mpv
+       #  vlc
 
-        # Creative
-        obs-studio
-        obs-studio-plugins.obs-websocket
-        uxplay
-        # ndi
-        # libndi-4
-        # obs-studio-plugins.obs-ndi
-        audacity
-        shotcut
-        lwks2022
-        gimp
-        inkscape
+       #  # Creative
+       #  # obs-studio
+       #  # obs-studio-plugins.obs-websocket
+       #  # uxplay
+       #  audacity
+       #  # shotcut
+       #  # lwks2022
+       #  gimp
+       #  inkscape
 
-        # Security
-        keepassxc
-        libsecret
-        gnome.seahorse
-        openvpn
+       #  # Security
+       #  keepassxc
+       #  libsecret
+       #  gnome.seahorse
+       #  openvpn
 
-        # Crypto
-        # electrum
+       #  # Crypto
+       #  # electrum
 
-        # Commmunication
-        skypeforlinux
-        slack
-        zoom-us
-        tdesktop
-        mailspring
+       #  # Commmunication
+       #  # skypeforlinux
+       #  # slack
+       #  # zoom-us
+       #  # tdesktop
+       #  # mailspring
 
-        # Misc
-        transmission
-        razergenie
-        # calibre # ebook manager
-        lutris # games installer
+       #  # Misc
+       #  # transmission
+       #  # razergenie
+       #  # calibre # ebook manager
+       #  # lutris # games installer
+       #  # parsec-bin
+       #  # sunshine
 
-        # Screen shots / screen recordings
-        flameshot
-        simplescreenrecorder
+       #  # Screen shots / screen recordings
+       #  flameshot
+       #  simplescreenrecorder
 
-        # Fonts
-        jetbrains-mono
-        font-awesome
-        material-design-icons
-        rubik
-        roboto
-        paratype-pt-sans
+       #  # Fonts
+       #  jetbrains-mono
+       #  font-awesome
+       #  material-design-icons
+       #  rubik
+       #  roboto
+       #  paratype-pt-sans
 
-        # Fin
-        # ledger
-        fava
-        gnuplot_qt
+       #  # Fin
+       #  # ledger
+       #  fava
+       #  gnuplot_qt
 
-        # Dev
-        gh
-        gnumake
-        dbeaver
-        google-cloud-sdk
-        # android-studio
-        docker-compose
-        postman
-        arduino-cli
-        jdk
-        mosquitto
+       #  # Dev
+       #  gh
+       #  gnumake
+       #  # dbeaver
+       #  google-cloud-sdk
+       #  # android-studio
+       #  docker-compose
+       #  # postman
+       #  arduino-cli
+       #  jdk
+       #  mosquitto
+
+        # LLMs
+        conda
+        cudaPackages.cudnn
       ];
 
       keyboard = {
@@ -222,6 +219,8 @@ in {
           ".local/share/vlc"             # VLC settings
           ".local/share/direnv"          # direnv permission directory
           ".local/data/pgsql"            # postgresql data
+          ".local/plex"                  # plex
+          ".ollama"                      # To not redownload LLMs
           ".ssh"
           ".ntcardvt-wrapped"            # lightworks settings
 
@@ -242,23 +241,90 @@ in {
         ];
       };
     };
+
+    home.file.".xinitrc" = {
+      text = ''
+        # if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+        #   eval $(dbus-launch --exit-with-session --sh-syntax)
+        # fi
+        # systemctl --user import-environment DISPLAY XAUTHORITY
+
+        # if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+        #   dbus-update-activation-environment DISPLAY XAUTHORITY
+        # fi
+
+        # if [ -z "$HM_XPROFILE_SOURCED" ]; then
+        #   . "/home/kuzzmi/.xprofile"
+        # fi
+        # unset HM_XPROFILE_SOURCED
+
+        # systemctl --user start hm-graphical-session.target
+
+        # QT_QPA_PLATFORMTHEME=qt5ct
+        # XCURSOR_SIZE="48"
+        # XCURSOR_THEME="Qogir"
+        # xset r rate 210 40
+        # $HOME/.fehbg
+
+        xrandr -s 1920x1080 &
+
+        steam &
+
+        exec ${pkgs.xfce.xfce4-session}/bin/xfce4-session
+      '';
+    };
   };
+
 
   services = {
     # Enables startx script with Xmonad.
     # NOTE: Can't be loaded as a part of the Home Manager.
     xserver = {
       displayManager = {
-        defaultSession = "startx+xmonad";
+        # sddm.enable = true;
+        # lightdm.enable = true;
+        # gdm.enable = true;
+        # defaultSession = "startx+xmonad";
         startx.enable = true;
+      };
+      desktopManager = {
+        # plasma5.enable = true;
+        # gnome.enable = true;
+        xfce.enable = true;
       };
     };
     usbmuxd.enable = true;
-    # TODO: move this to iriun derivation
-    # Needed for iriun
+
+    sunshine = {
+      enable = true;
+      capSysAdmin = true;
+      openFirewall = true;
+    };
+
+    # Needed for iriun, sunshine
     avahi = {
       enable = true;
+      publish = {
+        enable = true;
+        userServices = true;
+      };
     };
+
+    plex = {
+      enable = true;
+      openFirewall = true;
+      user = "kuzzmi";
+      # dataDir = "/home/kuzzmi/.local/plex";
+    };
+
+    # xrdp = {
+    #   enable = true;
+    #   defaultWindowManager = "startplasma-x11";
+
+    #   # defaultWindowManager = "${pkgs.icewm}/bin/icewm";
+    #   # defaultWindowManager = "startx+xmonad";
+    #   openFirewall = true;
+    # };
   };
 
   # Fixes keychron keyboard
@@ -278,7 +344,19 @@ in {
     extraGroups.vboxusers.members = [ "kuzzmi" ];
     users.kuzzmi = {
       isNormalUser = true;
-      extraGroups = [ "wheel" "docker" "dialout" "plugdev" "openrazer" "networkmanager" ];
+      extraGroups = [
+        "wheel"
+        "docker"
+        "dialout"
+        "plugdev"
+        "openrazer"
+        "networkmanager"
+        "input"
+        "avahi"
+        "tty"
+        "video"
+        "audio"
+      ];
 
       # Dummy password to use on initial system loading
       initialHashedPassword = "$6$86LJPxDbacGIiX2G$HlMGeEwhFD6l4N34Mj2JzDOfl6nMOfGkH9HjdQbEfXM1ruX8eZ9r7Q/K6tB5ZK6K7a67.uhSVW8fRiMZYCH64.";
