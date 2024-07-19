@@ -31,12 +31,11 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   -- buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-
 end
 
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { "tsserver", "gopls" }
+local servers = { "tsserver", "nixd", "gopls" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
@@ -45,6 +44,14 @@ for _, lsp in ipairs(servers) do
     }
   }
 end
+
+nvim_lsp.clangd.setup {
+  on_attach = on_attach,
+  cmd = { "/nix/store/vyvqd807xcvljycncgpnzscgwspifm74-clang-16.0.6/bin/clangd" },
+  flags = {
+    debounce_text_changes = 150,
+  }
+}
 
 require'compe'.setup {
   enabled = true;

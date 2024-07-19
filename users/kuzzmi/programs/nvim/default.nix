@@ -45,9 +45,10 @@ in {
 
     extraPackages = with pkgs; [
       silver-searcher
-      # arduino-cli
-      # arduino-language-server
       gopls
+      platformio
+      clang-tools
+      nixd
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];
@@ -79,6 +80,7 @@ in {
       vim-javascript
       vim-ledger
       (plugin "prisma/vim-prisma")
+      (plugin "normen/vim-pio")
       # (plugin "stevearc/vim-arduino")
 
       # Misc
