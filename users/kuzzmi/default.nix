@@ -6,7 +6,7 @@ let
   };
 
   home-manager = builtins.fetchTarball {
-    url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
+    url = "https://github.com/nix-community/home-manager/archive/master.tar.gz";
   };
 
   inherit (pkgs) stdenv;
@@ -94,35 +94,14 @@ in {
         yt-dlp
 
         # Finances
-        fava
         hledger
-
-        # Commmunication
-
-        # Misc
-        # transmission
-
-        # Fonts
-        # jetbrains-mono
-        # font-awesome
-        # material-design-icons
-        # rubik
-        # roboto
-        # paratype-pt-sans
-
-        # # Dev
-        # gh
-        # gnumake
-        # dbeaver
-        # google-cloud-sdk
-        # # android-studio
-        # # docker-compose
-        # postman
       ];
     };
   };
 
   fonts.fontDir.enable = true;
+
+  programs.zsh.enable = true;
 
   users = {
     users.kuzzmi = {
