@@ -41,6 +41,12 @@
     keyboard.remapCapsLockToEscape = true;
 
     defaults = {
+      finder = {
+        AppleShowAllFiles = true;
+        FXPreferredViewStyle = "Nlsv";
+        ShowPathbar = true;
+        ShowStatusBar = true;
+      };
       NSGlobalDomain = {
         AppleInterfaceStyleSwitchesAutomatically = true;
 

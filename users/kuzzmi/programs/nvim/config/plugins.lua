@@ -5,7 +5,7 @@ require'gen'.setup {
   -- model = "dolphin-mixtral:8x7b-v2.7-q2_K", -- The default model to use.
   -- model = "dolphin", -- The default model to use.
   -- model = "dolphin-mixtral", -- The default model to use.
-  model = "codellama:7b", -- The default model to use.
+  model = "llama3", -- The default model to use.
   display_mode = "float", -- The display mode. Can be "float" or "split".
   auto_close_after_replace = false,
   show_prompt = false, -- Shows the Prompt submitted to Ollama.
@@ -13,7 +13,7 @@ require'gen'.setup {
   no_auto_close = true, -- Never closes the window automatically.
   -- init = function(options) pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
   -- Function to initialize Ollama
-  command = "curl --silent --no-buffer -X POST http://192.168.88.12:11434/api/generate -d $body",
+  command = "curl --silent --no-buffer -X POST http://192.168.88.254:11434/api/generate -d $body",
   -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
   -- This can also be a lua function returning a command string, with options as the input parameter.
   -- The executed command must return a JSON object with { response, context }
@@ -24,6 +24,7 @@ require'gen'.setup {
 
 require('gen').prompts = {
   Generate = { prompt = "$input", replace = true },
+  Chat = { prompt = "$input", replace = false },
   Ask_Code = {
     prompt = "$input \n Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
   }
