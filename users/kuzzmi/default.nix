@@ -32,12 +32,12 @@ in {
       ./customization.nix
 
       # platform agnostic
-       ./programs/kitty/default.nix
-       ./programs/git/default.nix
-       ./programs/zsh/default.nix
-       ./programs/nvim/default.nix
-       ./programs/ranger/default.nix
-       ./programs/tmux/default.nix
+      ./programs/kitty/default.nix
+      ./programs/git/default.nix
+      ./programs/zsh/default.nix
+      ./programs/nvim/default.nix
+      ./programs/ranger/default.nix
+      ./programs/tmux/default.nix
     ];
 
     programs.home-manager.enable = true;

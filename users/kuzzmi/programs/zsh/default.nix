@@ -24,7 +24,7 @@ in {
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" "yarn" "gpg-agent" "docker" ];
-      theme = "minimal";
+      theme = "candy";
       custom = "./custom";
     };
     initExtraFirst = ''
