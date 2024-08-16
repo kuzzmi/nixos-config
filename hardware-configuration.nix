@@ -25,7 +25,7 @@
   fileSystems."/" =
     { device = "none";
       fsType = "tmpfs";
-      options = [ "defaults" "size=12G" "mode=755" ];
+      options = [ "defaults" "size=4G" "mode=755" ];
     };
 
   fileSystems."/boot" =
@@ -43,10 +43,10 @@
       fsType = "ext4";
     };
 
-  fileSystems."/home/kuzzmi/Videos" =
-    { device = "/dev/disk/by-uuid/c9451243-a420-446d-bd35-060b6c8a0925";
-      fsType = "ext4";
-    };
+  #fileSystems."/home/kuzzmi/Videos" =
+  #  { device = "/dev/disk/by-uuid/c9451243-a420-446d-bd35-060b6c8a0925";
+  #    fsType = "ext4";
+  #  };
 
   swapDevices = [ ];
 

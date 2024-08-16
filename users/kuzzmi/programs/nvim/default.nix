@@ -95,7 +95,7 @@ in {
       dressing-nvim
       (plugin "nvim-lualine/lualine.nvim")
       (plugin "nvim-tree/nvim-web-devicons")
-      (plugin "David-Kunz/gen.nvim") # Local LLM integration
+      # (plugin "David-Kunz/gen.nvim") # Local LLM integration
 
       (plugin "nvim-lua/plenary.nvim")
       (plugin "nvim-telescope/telescope.nvim")

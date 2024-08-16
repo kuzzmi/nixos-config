@@ -17,7 +17,7 @@ in {
     enableIPv6 = false;
     networkmanager.enable = false;
     wireless = {
-      enable = false; # true;
+      enable = false;
       userControlled.enable = true;
       networks = {
         SLAVA_UKRAYINI = {
@@ -29,6 +29,8 @@ in {
       enable = true;
       allowedTCPPorts = [
         22 5001 3000 9999 5960 5961 5962 7053 7054 11223 5201
+	3389
+	18083 # vboxwebsrv
       ];
       allowedUDPPorts = [ 8554 ];
     };
@@ -46,6 +48,8 @@ in {
     virtualbox.host = {
       enable = false;
       enableExtensionPack = true;
+      enableWebService = true;
+      headless = true;
     };
   };
 
@@ -62,8 +66,7 @@ in {
   # sound.enable = true;
   hardware = {
     pulseaudio.enable = true;
-  #   # openrazer.enable = true;
-  #   # bluetooth.enable = true;
+    nvidia-container-toolkit.enable = true;
   };
 
   users.mutableUsers = false;
@@ -80,13 +83,13 @@ in {
             Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
 	    Option         "TripleBuffer" "on"
       '';
-      libinput = {
-        enable = true;
+    };
+    libinput = {
+      enable = true;
 
-        # disabling mouse acceleration
-        mouse = {
-          accelProfile = "flat";
-        };
+      # disabling mouse acceleration
+      mouse = {
+        accelProfile = "flat";
       };
     };
     dbus.packages = with pkgs; [ dconf ];
@@ -141,5 +144,5 @@ in {
     };
   };
 
-  system.stateVersion = "21.05";
+  system.stateVersion = "23.11";
 }

@@ -2,7 +2,7 @@
 let
   credentials = config.age.secrets.nas.path;
   mounts = [
-    # { local = "Backups"; remote = "Backups"; }
+    { local = "Backups"; remote = "Backups"; }
     # { local = "Downloads"; remote = "Download"; }
     # { local = "Documents"; remote = "Documents"; }
     { local = "Multimedia"; remote = "Multimedia"; }
@@ -11,10 +11,10 @@ let
     # { local = "Containers"; remote = "ContainerData"; }
   ];
   mount = { local, remote }: {
-    fileSystems."/home/kuzzmi/${local}" = {
-      device = "//192.168.88.251/${remote}";
+    fileSystems."/nas/${local}" = {
+      device = "//nas.lan/${remote}";
       fsType = "cifs";
-      options = [ "credentials=${credentials}" "x-systemd.automount" "noauto" "uid=kuzzmi"];
+      options = [ "credentials=${credentials}" "x-systemd.automount" "noauto" "uid=kuzzmi" "gid=users" "noserverino"];
     };
   };
 in {

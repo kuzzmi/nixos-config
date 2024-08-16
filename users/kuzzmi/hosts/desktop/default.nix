@@ -190,54 +190,33 @@ in {
       persistence."/nix/persist/home/kuzzmi" = {
         allowOther = false;
         directories = [
+	  # For some reason passwordless access works only with symlink.
+	  # Perhaps that's how permission resolution works. Root has access to
+	  # /nix/persist/home/*, but not to /home/*
+	  {
+	    directory = ".ssh";
+	    method = "symlink";
+	  }
+
           "Projects"                     # Pet and work projects
-          "Pictures"                     # Wallpapers, sketches etc
-          "VirtualBox VMs"               # Virtual machines
-          ".arduino15"                   # To not redownload Arduino stuff
-          ".audacity"                    # Audacity
-          ".config/Authy Desktop"        # Authy settings
-          ".config/audacity"             # Audacity
-          ".config/obs-studio"           # OBS studio settings/plugins
           ".config/configstore"          # ConfigStore settings (npm package for binaries)
-          ".config/google-chrome"        # Google Chrome profiles
-          ".config/GIMP"                 # GIMP
-          ".config/keepassxc"            # TODO: Settings for KeePassXC, not working
-          ".config/Slack"                # Slack stuff
-          ".config/mpv"                  # mpv config
           ".config/zsh"                  # Zsh history
-          ".config/Mailspring"           # Email
-          ".config/qt5ct"                # TODO: QT5 theming, not working
           ".config/pulse"                # PulseAudio settings
-          ".config/Postman"              # Postman settings
-          ".config/nextjs-nodejs"        # NextJS settings
           ".config/rclone"               # rclone settings
           ".local/share/applications"    # drun shortcuts
-          ".local/share/DBeaverData"     # dbeaver settings
           ".local/share/keyrings"        # security keyrings
           ".local/share/ranger"          # ranger stuff
-          ".local/share/TelegramDesktop" # Telegram settings
-          ".local/share/vlc"             # VLC settings
           ".local/share/direnv"          # direnv permission directory
-          ".local/data/pgsql"            # postgresql data
-          ".local/plex"                  # plex
+          # ".local/plex"                  # plex
           ".ollama"                      # To not redownload LLMs
-          ".ssh"
-          ".ntcardvt-wrapped"            # lightworks settings
+	  "VirtualBox VMs"               # Virtualbox VMs
+          # ".ntcardvt-wrapped"            # lightworks settings
 
           # Steam
           ".local/share/Steam"
           ".factorio"
-
-          # "Videos"                                   # Local videos
-          # "Android"                                  # To not redownload Android binaries every time
-          # ".electrum"                                # Cryptooo
-          # ".config/Android Open Source Project"      # Android Emulator
-          # ".config/Google"                           # Android Studio settings
-          # ".local/share/Android Open Source Project" # Android Emulator
-          # ".local/share/Google"                      # Android Studio settings
         ];
         files = [
-          ".fehbg"
         ];
       };
     };
@@ -310,12 +289,13 @@ in {
       };
     };
 
-    plex = {
-      enable = true;
-      openFirewall = true;
-      user = "kuzzmi";
-      # dataDir = "/home/kuzzmi/.local/plex";
-    };
+    # plex = {
+    #   enable = true;
+    #   openFirewall = true;
+    #   user = "kuzzmi";
+    #   group = "users";
+    #   # dataDir = "/home/kuzzmi/.local/plex";
+    # };
 
     # xrdp = {
     #   enable = true;
