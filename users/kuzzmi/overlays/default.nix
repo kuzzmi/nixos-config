@@ -1,5 +1,8 @@
 final: prev:
 
+let
+in
+
 {
   # mailspring = prev.mailspring.overrideAttrs (old: {
   #   version = "1.8.0-libre";

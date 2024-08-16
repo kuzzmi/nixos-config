@@ -1,4 +1,10 @@
-{ config, pkgs, ... }:
+{ config, ... }:
+let
+  pkgs = import <nixpkgs> {
+    config.allowUnfree = true;
+    overlays = [(import ../../overlays/default.nix)];
+  };
+in
 {
   home-manager.users.kuzzmi = { ... }: {
     home = {
@@ -59,4 +65,6 @@
       dock.wvous-bl-corner = 4;
     };
   };
+
+  # https://remotebox.knobgoblin.org.uk/downloads/RemoteBox-3.2.tar.bz2
 }
