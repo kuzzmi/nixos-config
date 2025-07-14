@@ -245,10 +245,49 @@ require("dressing").setup({
       end,
     },
 
+    -- Set to `false` to disable
+    mappings = {
+      ["<Esc>"] = "Close",
+      ["<C-c>"] = "Close",
+      ["<CR>"] = "Confirm",
+    },
+
     -- Used to override format_item. See :help dressing-format
     format_item_override = {},
 
     -- see :help dressing_get_config
     get_config = nil,
   },
+})
+
+require('snippy').setup({
+  mappings = {
+    is = {
+      ['<Tab>'] = 'expand_or_advance',
+      ['<S-Tab>'] = 'previous',
+    },
+    nx = {
+      ['<leader>x'] = 'cut_text',
+    },
+  },
+})
+
+require('ollama').setup({
+  model = "llama3.2:latest",
+  url = "http://192.168.88.86:11434",
+  -- View the actual default prompts in ./lua/ollama/prompts.lua
+  prompts = {
+    Comment_Code = {
+      prompt = "Given the file content for context:\n```$ftype\n$sel\n```\n"
+        .. "Write a very concise, short and useful comment about this piece of code:\n```$ftype\n$sel\n```"
+        .. "Respond EXACTLY in this format:\n```$ftype\n<your code>\n```",
+      action = "replace",
+    },
+    Sample_Prompt = {
+      prompt = "This is a sample prompt that receives $input and $sel(ection), among others.",
+      input_label = "> ",
+      model = "mistral",
+      action = "display",
+    }
+  }
 })

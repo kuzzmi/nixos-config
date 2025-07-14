@@ -1,36 +1,34 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 let
   # installs a vim plugin from git with a given tag / branch
-  pluginGit = ref: repo: postinstall: pkgs.vimUtils.buildVimPlugin {
-    pname = "${lib.strings.sanitizeDerivationName repo}";
-    version = ref;
-    src = builtins.fetchGit {
-      url = "https://github.com/${repo}.git";
-      ref = ref;
+  pluginGit = ref: repo: postinstall:
+    pkgs.vimUtils.buildVimPlugin {
+      pname = "${lib.strings.sanitizeDerivationName repo}";
+      version = ref;
+      src = builtins.fetchGit {
+        url = "https://github.com/${repo}.git";
+        ref = ref;
+      };
+      postInstall = postinstall;
     };
-    postInstall = postinstall;
-  };
 
   # always installs latest version
   plugin = repo: pluginGit "HEAD" repo "";
   pluginWithPost = repo: pluginGit "HEAD" repo;
 in {
-  home.file.".config/nvim/snippets" = {
-    source = ./config/snippets;
+  home.file = {
+    ".config/nvim/snippets" = { source = ./config/snippets; };
+    ".config/nvim/ftplugin" = { source = ./config/ftplugin; };
+    ".config/nvim/colors" = { source = ./config/colors; };
   };
-  home.file.".config/nvim/ftplugin" = {
-    source = ./config/ftplugin;
-  };
-  home.file.".config/nvim/colors" = {
-    source = ./config/colors;
-  };
+
   programs.neovim = {
     enable = true;
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    # withNodeJs = true;
     withPython3 = true;
+    # withNodeJs = true;
 
     extraConfig = builtins.concatStringsSep "\n" [
       (lib.strings.fileContents ./config/base.vim)
@@ -38,7 +36,9 @@ in {
     ];
 
     extraLuaConfig = builtins.concatStringsSep "\n" [
+      (lib.strings.fileContents ./config/utils.lua)
       (lib.strings.fileContents ./config/base.lua)
+      (lib.strings.fileContents ./config/menu.lua)
       (lib.strings.fileContents ./config/lsp.lua)
       (lib.strings.fileContents ./config/plugins.lua)
     ];
@@ -49,15 +49,26 @@ in {
       platformio
       clang-tools
       nixd
+      nixfmt
       nodePackages.typescript
       nodePackages.typescript-language-server
     ];
+
     plugins = with pkgs.vimPlugins; [
+      lazy-nvim
+
       # LSP, completion and diagnostics
       nvim-lspconfig
-      nvim-compe
       ale
-      (plugin "folke/trouble.nvim")
+      nvim-cmp
+      cmp-nvim-lsp
+      cmp-buffer
+      cmp-path
+      # (plugin "hrsh7th/cmp-cmdline")
+      # (plugin "hrsh7th/cmp-omni")
+      nvim-snippy
+      cmp-snippy
+      trouble-nvim
 
       # Formatting
       vim-easy-align
@@ -86,7 +97,6 @@ in {
       # Misc
       vim-startify # lovely cow
       zen-mode-nvim
-      vim-snipmate
       vim-snippets
 
       vim-abolish
@@ -95,10 +105,13 @@ in {
       dressing-nvim
       (plugin "nvim-lualine/lualine.nvim")
       (plugin "nvim-tree/nvim-web-devicons")
+      (plugin "nomnivore/ollama.nvim")
       # (plugin "David-Kunz/gen.nvim") # Local LLM integration
 
-      (plugin "nvim-lua/plenary.nvim")
-      (plugin "nvim-telescope/telescope.nvim")
+      plenary-nvim
+      telescope-nvim
+      # (plugin "nvim-lua/plenary.nvim")
+      # (plugin "nvim-telescope/telescope.nvim")
     ];
   };
 }

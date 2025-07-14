@@ -1,11 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ./common-configuration.nix
-  ];
+  imports = [ ./common-configuration.nix ];
 
-  services.nix-daemon.enable = true;
+  # services.nix-daemon.enable = true;
 
   programs.zsh.enable = true;
   nix.package = pkgs.nix;

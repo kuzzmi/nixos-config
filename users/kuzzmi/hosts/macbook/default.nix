@@ -2,10 +2,9 @@
 let
   pkgs = import <nixpkgs> {
     config.allowUnfree = true;
-    overlays = [(import ../../overlays/default.nix)];
+    overlays = [ (import ../../overlays/default.nix) ];
   };
-in
-{
+in {
   home-manager.users.kuzzmi = { ... }: {
     home = {
       packages = with pkgs; [
@@ -13,15 +12,16 @@ in
         micromamba
         # hledger
         # hledger-ui
+        # wine64Packages.stable
       ];
     };
   };
 
-  fonts.packages = [
-    pkgs.rubik
-    pkgs.jetbrains-mono
-    pkgs.nerdfonts
-  ];
+  # system = {
+  #   allowUnsupportedSystem = true;
+  # };
+
+  fonts.packages = [ pkgs.rubik pkgs.jetbrains-mono pkgs.nerd-fonts._0xproto ];
 
   launchd.user.agents = {
     "lorri" = {

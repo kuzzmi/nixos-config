@@ -9,21 +9,8 @@ filetype plugin on
 " }}}
 " FileTypes {{{
 " ============
-"
-" Filetype specific omnifuncs
-" augroup omnifuncs
-"     autocmd FileType css,scss setlocal omnifunc=csscomplete#CompleteCSS
-"     autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"     autocmd FileType typescript setlocal omnifunc=TSOmnicFunc
-" augroup END
 
 set completeopt=noinsert,menuone,noselect
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR>      compe#confirm('<CR>')
-inoremap <silent><expr> <C-e>     compe#close('<C-e>')
-inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
-inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
 
 " Some Markdown settings
 autocmd BufNewFile,BufRead *.md set filetype=markdown
@@ -90,11 +77,8 @@ nnoremap <silent> <C-L> <C-W>l
 " Rename current word
 nnoremap <leader>d yiw:%Subvert:<C-R>":
 
-" Search for current word in cwd
-nnoremap <silent> <C-F> yiw:Ag <C-R>"<CR>
-
 " Toggle paste mode
-set pastetoggle=<F12>
+" set pastetoggle=<F12>
 
 " Shortcut to enter visual block substitution
 vnoremap <leader>d y<Esc>:%s:<C-R>":
@@ -145,15 +129,6 @@ vnoremap : ;
 " Remove trailing spaces on F5
 nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 
-" Copy whole file to clipboard
-nnoremap <F4> <Esc>ggVG"*y
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
 " }}}
 " Colors and font settings {{{
 set t_Co=256
@@ -161,6 +136,7 @@ set background=dark
 colorscheme wal
 set notermguicolors
 " }}}
+"
 " Folding {{{
 " =======
 set foldenable
@@ -228,10 +204,6 @@ set showcmd
 " Who doesn't like autoindent?
 set autoindent
 
-" Cool tab completion stuff
-" set wildmenu
-" set wildmode=list:longest,full
-
 " Ignoring case is a fun trick
 set ignorecase
 
@@ -261,14 +233,5 @@ set imsearch=0
 highlight lCursor guifg=NONE guibg=Cyan
 
 hi MatchParen cterm=reverse ctermbg=white
-
-" Closetag files
-let g:closetag_filenames = "*.html,*.js,*.jsx,*.tsx"
-let g:closetag_regions = {
-    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
-    \ 'javascript.jsx': 'jsxRegion',
-    \ 'typescriptreact': 'jsxRegion,tsxRegion',
-    \ 'javascriptreact': 'jsxRegion',
-    \ }
 " }}}
 " vim:foldmethod=marker:foldlevel=0
