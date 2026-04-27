@@ -9,7 +9,7 @@ in {
     home = {
       packages = with pkgs; [
         lorri
-        micromamba
+        # micromamba
         # hledger
         # hledger-ui
         # wine64Packages.stable

@@ -2,7 +2,8 @@
 let
   inherit (pkgs) stdenv;
   colors = config.customization.colors;
-in {
+in
+{
   programs.kitty = {
     enable = true;
     keybindings = {

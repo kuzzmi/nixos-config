@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 let
   inherit (pkgs) stdenv;
   nixConfigRoot =
@@ -20,7 +20,7 @@ in {
       up = if stdenv.isLinux then
         "sudo nixos-rebuild switch"
       else
-        "darwin-rebuild switch";
+        "sudo darwin-rebuild switch";
       nre = "sudo nvim ${nixConfigRoot}/common-configuration.nix";
       nreu = "nvim ${nixConfigRoot}/users/kuzzmi/default.nix";
       edit-nvim =
@@ -45,7 +45,7 @@ in {
       export GDK_SCALE=2
       export GDK_DPI_SCALE=0.75
       eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
-      export PATH=$PATH:/Users/kuzzmi/Library/Python/3.9/bin:/Users/kuzzmi/.local/bin
+      export PATH=$PATH:/Users/kuzzmi/Library/Python/3.9/bin:/Users/kuzzmi/.local/bin:/Users/kuzzmi/.npm/npm-global/bin
     '';
     history = {
       size = 10000;

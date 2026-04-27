@@ -1,20 +1,11 @@
 { pkgs, lib, ... }:
 let
-  # installs a vim plugin from git with a given tag / branch
-  pluginGit = ref: repo: postinstall:
+  plugin = owner: repo: rev: sha256:
     pkgs.vimUtils.buildVimPlugin {
-      pname = "${lib.strings.sanitizeDerivationName repo}";
-      version = ref;
-      src = builtins.fetchGit {
-        url = "https://github.com/${repo}.git";
-        ref = ref;
-      };
-      postInstall = postinstall;
+      pname = repo;
+      version = rev;
+      src = pkgs.fetchFromGitHub { inherit owner repo rev sha256; };
     };
-
-  # always installs latest version
-  plugin = repo: pluginGit "HEAD" repo "";
-  pluginWithPost = repo: pluginGit "HEAD" repo;
 in {
   home.file = {
     ".config/nvim/snippets" = { source = ./config/snippets; };
@@ -50,8 +41,8 @@ in {
       clang-tools
       nixd
       nixfmt
-      nodePackages.typescript
-      nodePackages.typescript-language-server
+      typescript
+      typescript-language-server
     ];
 
     plugins = with pkgs.vimPlugins; [
@@ -78,21 +69,25 @@ in {
       vim-closetag
       Rename
       tcomment_vim
-      (plugin "cxw42/change-case.vim")
-      (plugin "PeterRincker/vim-argumentative")
+      (plugin "cxw42" "change-case.vim"
+        "6c86c365957430faec9baac68f8e05b2ab87b7b9"
+        "sha256-iX75rkLEhOP1rVDwphs+9HvIHIRotiK8RIPeTMnluEA=")
+      vim-argumentative
 
       # Navigation
       fzf-vim
-      (plugin "kelly-lin/telescope-ag")
+      (plugin "kelly-lin" "telescope-ag"
+        "7d25064da3c7689461bcfa89ad1f08548415193d"
+        "sha256-xOgiiTElHLgx7Gwp6aR0Ipfanq6ZTTgiQv9Zs3LTb1g=")
 
       # File specific plugins
       typescript-vim
       vim-jsx-typescript
       vim-javascript
       vim-ledger
-      (plugin "prisma/vim-prisma")
-      (plugin "normen/vim-pio")
-      # (plugin "stevearc/vim-arduino")
+      vim-prisma
+      (plugin "normen" "vim-pio" "6bba1d4e4c57f3bfadd0b3163652985a61764ab7"
+        "sha256-BW+bBb17+ukfWTg1zMMBxHk0thL6xFWiPXuHjB5K6VE=")
 
       # Misc
       vim-startify # lovely cow
@@ -103,15 +98,13 @@ in {
       vim-fugitive
       tlib_vim
       dressing-nvim
-      (plugin "nvim-lualine/lualine.nvim")
-      (plugin "nvim-tree/nvim-web-devicons")
-      (plugin "nomnivore/ollama.nvim")
-      # (plugin "David-Kunz/gen.nvim") # Local LLM integration
+      lualine-nvim
+      nvim-web-devicons
+      ollama-nvim
+      gen-nvim
 
       plenary-nvim
       telescope-nvim
-      # (plugin "nvim-lua/plenary.nvim")
-      # (plugin "nvim-telescope/telescope.nvim")
     ];
   };
 }

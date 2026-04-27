@@ -1,16 +1,15 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   impermanence = builtins.fetchTarball {
     url = "https://github.com/nix-community/impermanence/archive/master.tar.gz";
   };
 in {
-  imports =
-    [
-      "${impermanence}/nixos.nix"
-      ./common-configuration.nix
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    "${impermanence}/nixos.nix"
+    ./common-configuration.nix
+    ./hardware-configuration.nix
+  ];
 
   networking = {
     useDHCP = true;
@@ -21,16 +20,27 @@ in {
       userControlled.enable = true;
       networks = {
         SLAVA_UKRAYINI = {
-          pskRaw = "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
+          pskRaw =
+            "92834304f8d48e0e2d0e03c1510f9309eb453f378c928572704ccd785ff14de6";
         };
       };
     };
     firewall = {
       enable = true;
       allowedTCPPorts = [
-        22 5001 3000 9999 5960 5961 5962 7053 7054 11223 5201
-	3389
-	18083 # vboxwebsrv
+        22
+        5001
+        3000
+        9999
+        5960
+        5961
+        5962
+        7053
+        7054
+        11223
+        5201
+        3389
+        18083 # vboxwebsrv
       ];
       allowedUDPPorts = [ 8554 ];
     };
@@ -59,9 +69,7 @@ in {
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
-  console = {
-    keyMap = "colemak";
-  };
+  console = { keyMap = "colemak"; };
 
   # sound.enable = true;
   hardware = {
@@ -80,17 +88,15 @@ in {
       enable = true;
       videoDrivers = [ "nvidia" ];
       screenSection = ''
-            Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
-	    Option         "TripleBuffer" "on"
+                    Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+        	    Option         "TripleBuffer" "on"
       '';
     };
     libinput = {
       enable = true;
 
       # disabling mouse acceleration
-      mouse = {
-        accelProfile = "flat";
-      };
+      mouse = { accelProfile = "flat"; };
     };
     dbus.packages = with pkgs; [ dconf ];
     gnome.gnome-keyring.enable = true;
@@ -109,13 +115,10 @@ in {
         "/var/db/sudo"
         "/etc/nixos"
       ];
-      files = [
-        "/etc/machine-id"
-      ];
+      files = [ "/etc/machine-id" ];
     };
     etc = {
-      "ssh/ssh_host_rsa_key".source =
-        "/nix/persist/etc/ssh/ssh_host_rsa_key";
+      "ssh/ssh_host_rsa_key".source = "/nix/persist/etc/ssh/ssh_host_rsa_key";
       "ssh/ssh_host_rsa_key.pub".source =
         "/nix/persist/etc/ssh/ssh_host_rsa_key.pub";
       "ssh/ssh_host_ed25519_key".source =
@@ -135,9 +138,7 @@ in {
   };
 
   nix = {
-    gc = {
-      dates = "weekly";
-    };
+    gc = { dates = "weekly"; };
     optimise = {
       automatic = true;
       dates = [ "weekly" ];
