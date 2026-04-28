@@ -4,6 +4,11 @@ let
 in
 
 {
+  direnv = prev.direnv.overrideAttrs (_: {
+    # The upstream shell integration suite hangs during nix-darwin builds here.
+    doCheck = false;
+  });
+
   # mailspring = prev.mailspring.overrideAttrs (old: {
   #   version = "1.8.0-libre";
   #   src = builtins.fetchTarball {

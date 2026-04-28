@@ -22,6 +22,10 @@ in
   home-manager.users.kuzzmi =
     { ... }:
     {
+      _module.args = {
+        direnvPackage = pkgs.direnv;
+      };
+
       imports = [
         # nixvim.homeManagerModules.nixvim
         ./customization.nix

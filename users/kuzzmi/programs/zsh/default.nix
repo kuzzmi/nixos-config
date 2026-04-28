@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, direnvPackage ? pkgs.direnv, ... }:
 let
   inherit (pkgs) stdenv;
   nixConfigRoot =
@@ -44,7 +44,7 @@ in {
     initExtra = ''
       export GDK_SCALE=2
       export GDK_DPI_SCALE=0.75
-      eval "$(${pkgs.direnv}/bin/direnv hook zsh)"
+      eval "$(${direnvPackage}/bin/direnv hook zsh)"
       export PATH=$PATH:/Users/kuzzmi/Library/Python/3.9/bin:/Users/kuzzmi/.local/bin:/Users/kuzzmi/.npm/npm-global/bin
     '';
     history = {
