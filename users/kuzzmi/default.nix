@@ -68,6 +68,7 @@ in
           bat
           p7zip
           direnv
+          nixpkgs-fmt
           silver-searcher
           pandoc
 

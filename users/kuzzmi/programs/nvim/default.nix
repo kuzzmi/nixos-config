@@ -6,7 +6,8 @@ let
       version = rev;
       src = pkgs.fetchFromGitHub { inherit owner repo rev sha256; };
     };
-in {
+in
+{
   home.file = {
     ".config/nvim/snippets" = { source = ./config/snippets; };
     ".config/nvim/ftplugin" = { source = ./config/ftplugin; };
@@ -19,6 +20,7 @@ in {
     vimAlias = true;
     vimdiffAlias = true;
     withPython3 = true;
+    withRuby = true;
     # withNodeJs = true;
 
     extraConfig = builtins.concatStringsSep "\n" [
@@ -26,7 +28,7 @@ in {
       (lib.strings.fileContents ./config/plugins.vim)
     ];
 
-    extraLuaConfig = builtins.concatStringsSep "\n" [
+    initLua = builtins.concatStringsSep "\n" [
       (lib.strings.fileContents ./config/utils.lua)
       (lib.strings.fileContents ./config/base.lua)
       (lib.strings.fileContents ./config/menu.lua)

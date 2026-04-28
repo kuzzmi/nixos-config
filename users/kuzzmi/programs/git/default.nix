@@ -3,21 +3,26 @@
 {
   programs.git = {
     enable = true;
-    aliases = {
-      g = "gui";
-      s = "status -s";
-      c = "commit";
-      d = "diff";
-      co = "checkout";
-      cm = "commit -m";
-      ca = "add -A . && git commit -m";
-      pl = "pull --rebase";
-      pull = "pull --rebase";
-      ps = "push";
-    };
-    userName = "Igor Kuzmenko";
-    userEmail = "igor@kuzzmi.com";
-    extraConfig = {
+
+    signing.format = "openpgp";
+
+    settings = {
+      alias = {
+        g = "gui";
+        s = "status -s";
+        c = "commit";
+        d = "diff";
+        co = "checkout";
+        cm = "commit -m";
+        ca = "add -A . && git commit -m";
+        pl = "pull --rebase";
+        pull = "pull --rebase";
+        ps = "push";
+      };
+      user = {
+        name = "Igor Kuzmenko";
+        email = "igor@kuzzmi.com";
+      };
       core = {
         editor = "nvim";
       };
