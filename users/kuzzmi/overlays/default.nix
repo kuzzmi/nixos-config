@@ -9,6 +9,18 @@ in
     doCheck = false;
   });
 
+  pythonPackagesExtensions = (prev.pythonPackagesExtensions or [ ]) ++ [
+    (pyFinal: pyPrev: {
+      # The prebuilt wheel's dylib is missing an LC_RPATH entry on Darwin,
+      # so the post-build import check fails to dlopen it even though the
+      # package works fine once wrapped (e.g. via yt-dlp/mpv).
+      curl-cffi = pyPrev.curl-cffi.overrideAttrs (_: {
+        pythonImportsCheck = [ ];
+        doInstallCheck = false;
+      });
+    })
+  ];
+
   # mailspring = prev.mailspring.overrideAttrs (old: {
   #   version = "1.8.0-libre";
   #   src = builtins.fetchTarball {

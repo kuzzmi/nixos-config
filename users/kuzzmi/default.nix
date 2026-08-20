@@ -1,7 +1,31 @@
-{ ... }:
+{ lib, ... }:
 let
+  allowedUnfreePackages = [
+    "cmp-snippy"
+    "vim-easy-align"
+    "vim-surround"
+    "vim-repeat"
+    "auto-pairs"
+    "vim-closetag"
+    "Rename"
+    "vim-argumentative"
+    "typescript-vim"
+    "vim-javascript"
+    "vim-ledger"
+    "vim-abolish"
+    "vim-fugitive"
+  ];
+  allowUnfreePredicate =
+    pkg:
+    let
+      name = lib.getName pkg;
+      pname = pkg.pname or "";
+    in
+    builtins.any (
+      allowed: allowed == name || allowed == pname || "vimplugin-${allowed}" == name
+    ) allowedUnfreePackages;
   pkgs = import <nixpkgs> {
-    config.allowUnfree = true;
+    config.allowUnfreePredicate = allowUnfreePredicate;
     overlays = [ (import ./overlays/default.nix) ];
   };
 
@@ -22,6 +46,8 @@ in
   home-manager.users.kuzzmi =
     { ... }:
     {
+      nixpkgs.config.allowUnfreePredicate = allowUnfreePredicate;
+
       _module.args = {
         direnvPackage = pkgs.direnv;
       };
@@ -69,7 +95,7 @@ in
           p7zip
           direnv
           nixpkgs-fmt
-          silver-searcher
+          silver-searcher-ng
           pandoc
 
           # Dev

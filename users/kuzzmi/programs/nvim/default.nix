@@ -37,7 +37,7 @@ in
     ];
 
     extraPackages = with pkgs; [
-      silver-searcher
+      silver-searcher-ng
       gopls
       platformio
       clang-tools

@@ -3,9 +3,9 @@
 {
   imports = [ ./common-configuration.nix ];
 
-  # services.nix-daemon.enable = true;
-
   programs.zsh.enable = true;
+
+  nix.enable = true;
   nix.package = pkgs.nix;
 
   system.primaryUser = "kuzzmi";
